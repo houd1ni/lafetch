@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "target":"es5",
+    "module": "commonjs",
+    "allowJs": false,
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "outDir": "./dist/",
+    "rootDir": ".",
+    "baseUrl": "."
+  },
+  "include": [
+    "./src/main.ts"
+  ]
+}
