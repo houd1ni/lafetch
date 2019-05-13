@@ -1,3 +1,6 @@
+/// <reference types="node" />
+/// <reference types="ramda" />
+
 export interface AnyObject {
 	[key: string]: any;
 }
@@ -31,6 +34,6 @@ export declare class Fetch {
 	constructor(config: Partial<Config>);
 }
 /** Adds new headers to provided Query. */
-export declare const addHeaders: (query: Query, headers: Headers) => Query;
+export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
 
 export {};
