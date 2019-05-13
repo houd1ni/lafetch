@@ -35,5 +35,6 @@ export declare class Fetch {
 }
 /** Adds new headers to provided Query. */
 export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
+export declare const formURI: (query: Query) => string;
 
 export {};
