@@ -38,7 +38,7 @@ export const formURI = (query: Query) => {
     const params_part: string[] = []
     Object.entries(query.params).forEach(([name, param]) => {
       if(param != null && param != undefined) {
-        params_part.push(`${encodeURIComponent(name)}=${encodeURIComponent(param)}`)
+        params_part.push(`${name}=${param.replace(/&/g, '\\&')}`)
       }
     })
     if(params_part.length) {
