@@ -30,13 +30,7 @@ export class Fetch {
       return query
     }
   ]
-  private basic_query = {
-    url: '',
-    method: 'get',
-    headers: {},
-    params: '',
-    json: this.config.json
-  }
+  private basic_query: Query
   private applyMiddleware: (query: Query) => Promise<Query>
   public async query(query: Query) {
     query = await this.applyMiddleware(
@@ -54,6 +48,13 @@ export class Fetch {
   }
   constructor(config: Partial<Config>) {
     this.config = Object.assign({}, default_config, config)
+    this.basic_query = {
+      url: '',
+      method: 'get',
+      headers: {},
+      params: {},
+      json: this.config.json
+    }
     this.applyMiddleware = asyncpipe(
       ...this.config.middleware.concat(this.basic_middleware)
     )

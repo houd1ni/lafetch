@@ -22,7 +22,7 @@ const api = new Fetch({
   base: '/',
   // Object with headers.
   headers: {},
-  // List of middlewares executed from last to first
+  // List of async middlewares executed from last to first
   //   procesing queries. type is `(query: Query) => Promise<Query>`
   middleware: []
 })
@@ -46,12 +46,12 @@ interface Query {
 
 *Real example:*
 ```javascript
-const addDevHeaders = async (query: Query) => {
-  return addHeaders(query, {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer 123123123'
-  })
-}
+// addHeaders helper is curried.
+const addDevHeaders = async (query) => addHeaders({
+  'Content-Type': 'application/json',
+  Authorization: 'Bearer 123123123'
+})(query)
+
 const api = new Fetch({
   base: 'https://api.example.com/',
   middleware: [
