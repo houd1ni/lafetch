@@ -37,7 +37,8 @@ export const formURI = (query: Query) => {
   if(query.params) {
     const params_part: string[] = []
     Object.entries(query.params).forEach(([name, param]) => {
-      if(typeof param == 'string') {
+      if(param) {
+        param = String(param)
         params_part.push(`${name}=${param.replace(/&/g, '\\&')}`)
       }
     })
@@ -48,8 +49,8 @@ export const formURI = (query: Query) => {
   return encodeURI(query.url + parts.map(trim('-')).join('/'))
 }
 
+const trimSlash = trim('/')
 export const addBase = (base: string, url: string) => {
-  const trimSlash = trim('/')
   if(!url.includes('://') && !url.startsWith(base)) {
     return trimSlash(base) + '/' + trimSlash(url)
   } else {
