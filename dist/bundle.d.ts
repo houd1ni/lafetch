@@ -35,6 +35,8 @@ export declare class Fetch {
 }
 /** Adds new headers to provided Query. */
 export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
+export declare const forEach: Curry.Curry<(fn: Function, items: any[]) => Promise<void>>;
+export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
 export declare const formURI: (query: Query) => string;
 
 export {};
