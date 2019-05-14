@@ -30,7 +30,7 @@ export declare class Fetch {
 	private basic_middleware;
 	private basic_query;
 	private applyMiddleware;
-	query(query: Query): Promise<any>;
+	query<T = any>(query: Query): Promise<T>;
 	constructor(config: Partial<Config>);
 }
 /** Adds new headers to provided Query. */

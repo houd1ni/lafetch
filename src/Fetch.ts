@@ -32,7 +32,7 @@ export class Fetch {
   ]
   private basic_query: Query
   private applyMiddleware: (query: Query) => Promise<Query>
-  public async query(query: Query) {
+  public async query<T=any>(query: Query): Promise<T> {
     query = await this.applyMiddleware(
       mergeDeepRight(this.basic_query, query)
     )
