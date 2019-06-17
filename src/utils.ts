@@ -1,8 +1,8 @@
 
-import curry from 'ramda/src/curry'
+import { curry } from 'ramda'
 import { Query } from './types'
 
-const trim = curry((symbols: string, str: string) => {
+export const trim = curry((symbols: string, str: string) => {
   let found_first = null,
       found_last = null,
       symbol: string
@@ -25,14 +25,8 @@ const trim = curry((symbols: string, str: string) => {
   )
 })
 
-export const asyncpipe = (() => {
-  const pipe = async (fns: Function[], data: any, i: number): Promise<any> =>
-    ~i ? await pipe(fns, await fns[i](data), --i) : data
-  return (...fns: Function[]) => (data: any) => pipe(fns, data, fns.length-1)
-})()
-
 // Turns query params into query string.
-export const formURI = (query: Query) => {
+export const formURI = (query: Partial<Query>) => {
   const parts: string[] = []
   if(query.params) {
     const params_part: string[] = []
@@ -46,7 +40,7 @@ export const formURI = (query: Query) => {
       parts.push(`?${params_part.join('&')}`)
     }
   }
-  return encodeURI(query.url + parts.map(trim('-')).join('/'))
+  return encodeURI((query.url || '') + parts.map(trim('-')).join('/'))
 }
 
 const trimSlash = trim('/')

@@ -1,7 +1,9 @@
 // Helpers to import to apps for easier work.
-
-import curry from 'ramda/src/curry'
-import { Query, Headers } from './types'
+import {
+  curry, complement, pickBy, unary, isEmpty,
+  fromPairs, toPairs, compose, map, filter, isNil
+} from 'ramda'
+import { Query, Headers, AnyObject } from './types'
 
 /** Adds new headers to provided Query. */
 export const addHeaders = curry((headers: Headers, query: Query): Query => {
@@ -27,3 +29,42 @@ export const forEachAsync = curry(
   (fn: (item: any) => any, items: any[]) =>
     Promise.all(items.map(fn))
 )
+
+export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
+export const explore = (...data: any[]) => (console.log(...data) as any) || data
+export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
+  pickBy(unary(complement(isEmpty)))
+
+export const mapKeys = curry((
+  keyMap: {[oldKey: string]: string},
+  o: AnyObject
+) => (compose(
+  fromPairs,
+  filter(complement(isNil)),
+  map(
+    (([k, v]: [string, any]) =>
+      keyMap[k]===null
+      ? null
+      : [keyMap[k] || k, v] as any
+    )
+  ),
+  toPairs as any
+) as any)(o))
+
+export const asyncpipe = (() => {
+  const pipe = async (fns: Function[], data: any, i: number): Promise<any> => {
+    if(~i) {
+      const result = fns[i](data)
+      return await pipe(
+        fns,
+        result instanceof Promise
+          ? await result
+          : result,
+        --i
+      )
+    } else {
+      return data
+    }
+  }
+  return (...fns: Function[]) => (data: any) => pipe(fns, data, fns.length-1)
+})()

@@ -2,6 +2,8 @@
 
 
 export * from './types'
-export { Fetch } from './Fetch'
 export * from './helpers'
+export { Fetch } from './Fetch'
+export { Cached } from './Cached'
+export { AccessError, ServerError } from './Errors'
 export { formURI } from './utils'
