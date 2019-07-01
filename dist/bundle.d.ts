@@ -47,12 +47,12 @@ export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) =>
 export declare const forEach: Curry.Curry<(fn: Function, items: any[]) => Promise<void>>;
 export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
 export declare const waitAll: (promises: Promise<any>[]) => Promise<any[]>;
-export declare const explore: (...data: any[]) => any;
+export declare const explore: (data: any[]) => any;
 export declare const clearEmpty: <T = AnyObject>(o: T) => AnyObject;
 export declare const mapKeys: Curry.Curry<(keyMap: {
 	[oldKey: string]: string;
 }, o: AnyObject) => any>;
-export declare const asyncpipe: (...fns: Function[]) => (data: any) => Promise<any>;
+export declare const asyncpipe: (...fns: Function[]) => (data?: any) => Promise<any>;
 export declare class Fetch {
 	private config;
 	private middleware;

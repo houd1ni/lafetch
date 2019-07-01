@@ -31,7 +31,7 @@ export const forEachAsync = curry(
 )
 
 export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
-export const explore = (...data: any[]) => (console.log(...data) as any) || data
+export const explore = (data: any[]) => (console.log(data) as any) || data
 export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
   pickBy(unary(complement(isEmpty)))
 
@@ -66,5 +66,5 @@ export const asyncpipe = (() => {
       return data
     }
   }
-  return (...fns: Function[]) => (data: any) => pipe(fns, data, fns.length-1)
+  return (...fns: Function[]) => (data?: any) => pipe(fns, data, fns.length-1)
 })()
