@@ -10,7 +10,7 @@ export interface Headers {
 export type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect'
 
 export type OutMiddleware = (query: Query) => Promise<Query>
-export type InMiddleware = (data: any) => Promise<any>
+export type InMiddleware = ({ query: Query, response: any }) => Promise<any>
 
 export interface Config {
   base: string

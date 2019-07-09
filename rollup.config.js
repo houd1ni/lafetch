@@ -13,7 +13,6 @@ export default {
     format: process.env.BUILD === 'cjs' ? 'cjs' : 'es',
     name: 'lafetch'
   },
-  sourcemap: true,
   plugins: [
     resolve(),
     commonjs(),

@@ -1,6 +1,6 @@
 import mergeDeepRight from 'ramda/src/mergeDeepRight'
 import type from 'ramda/src/type'
-import { formURI, addBase } from './utils'
+import { formURI, addBase, hole } from './utils'
 import { Query, Config, OutMiddleware, InMiddleware, FetchData } from './types'
 import { addHeaders, asyncpipe } from './helpers'
 
@@ -13,6 +13,13 @@ const default_config = {
     in: [],
     out: []
   }
+}
+
+const finalTransform = (dir: 'in' | 'out') => {
+  return dir=='out'
+    ? hole
+    : async ({ query, response }) =>
+        query.json ? await response.json() : response
 }
 
 export class Fetch {
@@ -72,9 +79,9 @@ export class Fetch {
         }, query.timeout)
         const response = await fetch(query.url, data)
         if(!finished) {
-          clearTimeout(to);
+          clearTimeout(to)
           ff(this.applyMiddleware.in(
-            query.json ? await response.json() : response
+            { query, response }
           ))
         }
       })
@@ -94,12 +101,13 @@ export class Fetch {
       misc: {}
     }
     const middle = {} as { in: InMiddleware, out: OutMiddleware }
-    ;['in', 'out'].forEach((direction: string) => {
+    for(const direction of ['in', 'out']) {
       middle[direction] = asyncpipe(
+        finalTransform(direction as ('in' | 'out')),
         ...this.middleware[direction],
         ...this.config.middleware[direction]
       )
-    })
+    }
     this.applyMiddleware = middle
   }
 }

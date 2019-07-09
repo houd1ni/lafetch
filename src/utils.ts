@@ -51,3 +51,5 @@ export const addBase = (base: string, url: string) => {
     return url
   }
 }
+
+export const hole = <T=any>(a: T) => a as T
