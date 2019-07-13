@@ -23,8 +23,11 @@ const api = new Fetch({
   // Object with headers.
   headers: {},
   // List of async middlewares executed from last to first
-  //   procesing queries. type is `(query: Query) => Promise<Query>`
-  middleware: []
+  //   procesing queries.
+  middleware: {
+    in: [], // ({query, response}) => Promise<{query, response}>
+    out: [] // (query: Query) => Promise<Query>
+  }
 })
 ```
 *Query is of type*
@@ -55,7 +58,13 @@ const addDevHeaders = async (query) => addHeaders({
 const api = new Fetch({
   base: 'https://api.example.com/',
   middleware: [
-    addDevHeaders
+    out: [  // to a server.
+      addDevHeaders
+    ],
+    in: [  // from a server.
+      // You can handle error status codes, for instance.
+      async ({query, response}) => ({query, response})
+    ]
   ]
 })
 

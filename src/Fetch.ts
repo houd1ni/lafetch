@@ -72,17 +72,22 @@ export class Fetch {
         data.body = query.body
       }
       return new Promise(async (ff, rj) => {
-        let finished = false
+        let stuck = false
         const to = setTimeout(() => {
-          finished = true
+          stuck = true
           rj('timeout')
         }, query.timeout)
-        const response = await fetch(query.url, data)
-        if(!finished) {
+        try {
+          const response = await fetch(query.url, data)
+          if(!stuck) {
+            clearTimeout(to)
+            ff((await this.applyMiddleware.in(
+              { query, response }
+            )) as unknown as T) // this should be done by finalTransform.
+          }
+        } catch(e) {
           clearTimeout(to)
-          ff(this.applyMiddleware.in(
-            { query, response }
-          ))
+          throw e
         }
       })
     }
@@ -101,11 +106,11 @@ export class Fetch {
       misc: {}
     }
     const middle = {} as { in: InMiddleware, out: OutMiddleware }
-    for(const direction of ['in', 'out']) {
-      middle[direction] = asyncpipe(
-        finalTransform(direction as ('in' | 'out')),
-        ...this.middleware[direction],
-        ...this.config.middleware[direction]
+    for(const dir of ['in', 'out']) {
+      middle[dir] = asyncpipe(
+        finalTransform(dir as ('in' | 'out')),
+        ...this.middleware[dir],
+        ...this.config.middleware[dir]
       )
     }
     this.applyMiddleware = middle

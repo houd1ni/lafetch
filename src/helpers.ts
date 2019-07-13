@@ -1,7 +1,8 @@
 // Helpers to import to apps for easier work.
 import {
   curry, complement, pickBy, unary, isEmpty,
-  fromPairs, toPairs, compose, map, filter, isNil
+  fromPairs, toPairs, compose, map, filter, isNil,
+  tap, bind as rbind
 } from 'ramda'
 import { Query, Headers, AnyObject } from './types'
 
@@ -31,9 +32,11 @@ export const forEachAsync = curry(
 )
 
 export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
-export const explore = (data: any[]) => (console.log(data) as any) || data
+export const explore = tap(rbind(console.log, console))
 export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
   pickBy(unary(complement(isEmpty)))
+export const bind = (obj: AnyObject, methodName: string) =>
+  curry(obj[methodName].bind(obj))
 
 export const mapKeys = curry((
   keyMap: {[oldKey: string]: string},

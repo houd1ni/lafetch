@@ -12,7 +12,10 @@ export declare type OutMiddleware = (query: Query) => Promise<Query>;
 export declare type InMiddleware = ({ query: Query, response: any }: {
 	query: any;
 	response: any;
-}) => Promise<any>;
+}) => Promise<{
+	query: Query;
+	response: any;
+}>;
 export interface Config {
 	base: string;
 	json: true;

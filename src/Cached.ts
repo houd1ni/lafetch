@@ -3,15 +3,15 @@ type Callback<T> = (data: T) => void
 
 export class Cached<T = any> {
   private cache: {
-    [key: string]: T
+    [key: string]: any
   } = {}
   private proceccing: {
     [key: string]: {
-      ff: Callback<T>
-      rj: Callback<T>
+      ff: Callback<any>
+      rj: Callback<any>
     }[]
   } = {}
-  protected tryCache(key: string, fetchFn: () => Promise<T>): Promise<T> {
+  protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
     return new Promise((ff, rj) => {
       if(this.cache[key]) {
         ff(this.cache[key])
