@@ -39,7 +39,7 @@
     "prod:es": "cross-env NODE_ENV=production BUILD=es rollup -c",
     "prod": "npm run gentypes && npm run prod:es && npm run prod:cjs"
   },
-  "version": "0.1.2",
+  "version": "0.1.4",
   "ava": {
     "files": [
       "./test/specs/*.ts"
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.0.10",
+    "@types/ramda": "^0.26.14",
     "ava": "^2.1.0",
     "codecov": "^3.5.0",
     "cross-env": "^5.2.0",
@@ -76,7 +77,6 @@
   },
   "types": "./dist/bundle.d.ts",
   "dependencies": {
-    "@types/ramda": "^0.26.14",
     "ramda": "^0.26.1"
   }
 }

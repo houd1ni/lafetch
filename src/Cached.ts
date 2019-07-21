@@ -11,8 +11,8 @@ export class Cached<T = any> {
       rj: Callback<any>
     }[]
   } = {}
-  protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
-    return new Promise((ff, rj) => {
+  protected async tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
+    return await new Promise<P>((ff, rj) => {
       if(this.cache[key]) {
         ff(this.cache[key])
       } else if(this.proceccing[key]) {

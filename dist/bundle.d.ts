@@ -53,8 +53,9 @@ export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) =>
 export declare const forEach: Curry.Curry<(fn: Function, items: any[]) => Promise<void>>;
 export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
 export declare const waitAll: (promises: Promise<any>[]) => Promise<any[]>;
-export declare const explore: (data: any[]) => any;
+export declare const explore: (value: any) => any;
 export declare const clearEmpty: <T = AnyObject>(o: T) => AnyObject;
+export declare const bind: (obj: AnyObject, methodName: string) => Curry.Curry<any>;
 export declare const mapKeys: Curry.Curry<(keyMap: {
 	[oldKey: string]: string;
 }, o: AnyObject) => any>;
@@ -70,7 +71,7 @@ export declare class Fetch {
 export declare class Cached<T = any> {
 	private cache;
 	private proceccing;
-	protected tryCache(key: string, fetchFn: () => Promise<T>): Promise<T>;
+	protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P>;
 }
 export interface Response {
 	status: number;

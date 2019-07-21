@@ -87,7 +87,7 @@ export class Fetch {
           }
         } catch(e) {
           clearTimeout(to)
-          throw e
+          rj(e)
         }
       })
     }

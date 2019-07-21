@@ -32,8 +32,7 @@ export const formURI = (query: Partial<Query>) => {
     const params_part: string[] = []
     Object.entries(query.params).forEach(([name, param]) => {
       if(param != undefined) {
-        param = String(param)
-        params_part.push(`${name}=${param.replace(/&/g, '\\&')}`)
+        params_part.push(`${name}=${String(param).replace(/&/g, '\\&')}`)
       }
     })
     if(params_part.length) {

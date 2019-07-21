@@ -4,7 +4,6 @@ import typescript from 'rollup-plugin-typescript2'
 import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
 
-// FIXME: make them external: ramda, node
 
 export default {
   input: process.env.NODE_ENV==='development' ? 'test/in-browser.ts' : 'src/main.ts',
@@ -13,6 +12,7 @@ export default {
     format: process.env.BUILD === 'cjs' ? 'cjs' : 'es',
     name: 'lafetch'
   },
+  external: [ 'ramda' ],
   plugins: [
     resolve(),
     commonjs(),
