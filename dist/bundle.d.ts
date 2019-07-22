@@ -4,6 +4,7 @@
 export interface AnyObject {
 	[key: string]: any;
 }
+export declare type Credentials = 'omit' | 'same-origin' | 'include';
 export interface Headers {
 	[name: string]: string | null;
 }
@@ -21,6 +22,8 @@ export interface Config {
 	json: true;
 	headers: Headers;
 	timeout: number;
+	credentials: Credentials;
+	throwCodes: RegExp;
 	middleware: {
 		in?: InMiddleware[];
 		out?: OutMiddleware[];
@@ -38,6 +41,8 @@ export interface Query {
 	/** Request body. For POST requests in particular. */
 	body: any;
 	headers: Headers;
+	credentials: Credentials;
+	throwCodes?: RegExp;
 	json: boolean;
 	timeout: number;
 	misc: AnyObject;
@@ -46,6 +51,7 @@ export interface FetchData {
 	method: Method;
 	headers: Headers;
 	body?: any;
+	credentials?: Credentials;
 }
 export declare type AsyncFn = (...args: any[]) => Promise<any>;
 /** Adds new headers to provided Query. */

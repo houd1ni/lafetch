@@ -27,7 +27,9 @@ const api = new Fetch({
   middleware: {
     in: [], // ({query, response}) => Promise<{query, response}>
     out: [] // (query: Query) => Promise<Query>
-  }
+  },
+  credentials: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
+  throwCodes: /5../ // HTTP status codes to throw. Defaults to /\w/ (no throws at all).
 })
 ```
 *Query is of type*
@@ -44,6 +46,8 @@ interface Query {
   }
   headers?: Headers
   json?: boolean
+  credentials?: 'omit', // fetch API credentials field. Same as in the config.
+  throwCodes: /5../ // Status codes to throw. Same as in the config.
 }
 ```
 

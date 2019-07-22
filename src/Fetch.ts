@@ -9,6 +9,8 @@ const default_config = {
   json: true,
   headers: {},
   timeout: 1e4,
+  throwCodes: /\w/, // doesn't throw.
+  credentials: 'omit',
   middleware: {
     in: [],
     out: []
@@ -59,14 +61,15 @@ export class Fetch {
   }
   public async query<T=any>(query: Partial<Query>): Promise<T> {
     query = await this.applyMiddleware.out(
-      mergeDeepRight(this.basic_query, query)
+      mergeDeepRight(this.basic_query, query) as Query
     )
     if(query.result) {
       return query.result
     } else {
       const data: FetchData = {
         method: query.method,
-        headers: query.headers
+        headers: query.headers,
+        credentials: query.credentials
       }
       if(query.body) {
         data.body = query.body
@@ -81,9 +84,13 @@ export class Fetch {
           const response = await fetch(query.url, data)
           if(!stuck) {
             clearTimeout(to)
-            ff((await this.applyMiddleware.in(
-              { query, response }
-            )) as unknown as T) // this should be done by finalTransform.
+            if(query.throwCodes.test(String(response.status))) {
+              rj(response.status)
+            } else {
+              ff((await this.applyMiddleware.in(
+                { query, response }
+              )) as unknown as T) // this should be done by finalTransform.
+            }
           }
         } catch(e) {
           clearTimeout(to)
@@ -93,7 +100,7 @@ export class Fetch {
     }
   }
   constructor(config: Partial<Config> = {}) {
-    this.config = mergeDeepRight(default_config, config)
+    this.config = mergeDeepRight(default_config, config) as Config
     this.basic_query = {
       url: '',
       method: 'get',
@@ -103,6 +110,8 @@ export class Fetch {
       body: null,
       json: this.config.json,
       timeout: this.config.timeout,
+      credentials: this.config.credentials,
+      throwCodes: this.config.throwCodes,
       misc: {}
     }
     const middle = {} as { in: InMiddleware, out: OutMiddleware }
