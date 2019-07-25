@@ -46,7 +46,7 @@ const stringifyPair = (
             )
           )(value)
         case ',':
-          return compose(
+          return `${key}=` + compose(
             join(','),
             reduce(
               (accum, val) => append(unshield(val as string), accum),
