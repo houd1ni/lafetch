@@ -9,7 +9,7 @@ const default_config: Config = {
   json: true,
   headers: {},
   timeout: 1e4,
-  throwCodes: /\w/, // doesn't throw.
+  throwCodes: /\n/, // doesn't throw.
   credentials: 'omit',
   handleArrays: '[]',
   middleware: {

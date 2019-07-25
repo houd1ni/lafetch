@@ -29,7 +29,7 @@ const api = new Fetch({
     out?: [] // (query: Query) => Promise<Query>
   },
   credentials?: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
-  throwCodes?: /5../, // HTTP status codes to throw. Defaults to /\w/ (no throws at all).
+  throwCodes?: /5../, // HTTP status codes to throw. Defaults to /\n/ (no throws at all).
   handleArrays?: '[]' // querystring: arr[]=1&arr[]=2&... vs arr=1,2,...
 })
 ```

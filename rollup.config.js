@@ -1,6 +1,6 @@
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
-import typescript from 'rollup-plugin-typescript2'
+import typescript from 'rollup-plugin-typescript'
 import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
 
@@ -18,18 +18,8 @@ export default {
   plugins: [
     resolve(),
     commonjs(),
-    typescript({
-      typescript: require("typescript"),
-      tsconfig: "./tsconfig.json",
-      tsconfigOverride: {
-        compilerOptions: {
-          sourceMap: false,
-          inlineSourceMap: process.env.NODE_ENV==='development',
-          module: 'esnext'
-        }
-      }
-    }),
-    terser(),
+    typescript({ target: isDev ? 'esnext' : 'es5' }),
+    !isDev && terser(),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })

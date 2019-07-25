@@ -57,7 +57,6 @@ const stringifyPair = (
     default:
       return `${key}=${unshield(value)}`
   }
-  
 }
 
 /** Turns query params into query string. */
