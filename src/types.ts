@@ -10,6 +10,7 @@ export interface Headers {
 }
 
 export type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect'
+export type HandleArrays = '[]' | ','
 
 export type OutMiddleware = (query: Query) => Promise<Query>
 export type InMiddleware = ({ query: Query, response: any }) =>
@@ -22,8 +23,9 @@ export interface Config {
   timeout: number
   credentials: Credentials
   throwCodes: RegExp
+  handleArrays: HandleArrays
   middleware: {
-    in?: InMiddleware[],
+    in?: InMiddleware[]
     out?: OutMiddleware[]
   }
 }
@@ -45,6 +47,7 @@ export interface Query {
   json: boolean
   timeout: number
   misc: AnyObject
+  handleArrays: HandleArrays
 }
 
 export interface FetchData {

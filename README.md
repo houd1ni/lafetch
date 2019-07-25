@@ -17,26 +17,27 @@ const api = new Fetch({
   // Automatically turns response into an object.
   // Otherwise, returns raw response from fetch API:
   //   do `await response.json() to get it.
-  json: true,
+  json?: true,
   // Common base url. E.g. your api domain.
-  base: '/',
+  base?: '/',
   // Object with headers.
-  headers: {},
+  headers?: {},
   // List of async middlewares executed from last to first
   //   procesing queries.
-  middleware: {
-    in: [], // ({query, response}) => Promise<{query, response}>
-    out: [] // (query: Query) => Promise<Query>
+  middleware?: {
+    in?: [], // ({query, response}) => Promise<{query, response}>
+    out?: [] // (query: Query) => Promise<Query>
   },
-  credentials: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
-  throwCodes: /5../ // HTTP status codes to throw. Defaults to /\w/ (no throws at all).
+  credentials?: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
+  throwCodes?: /5../, // HTTP status codes to throw. Defaults to /\w/ (no throws at all).
+  handleArrays?: '[]' // querystring: arr[]=1&arr[]=2&... vs arr=1,2,...
 })
 ```
 *Query is of type*
 ```typescript
 interface Query {
   url: string
-  method: RESTMethods // e.g. 'get' or 'post'
+  method?: RESTMethods // e.g. 'get' or 'post'
   // Prevents query from going to server and returns this.
   // Useful for mocks.
   result?: any
@@ -47,7 +48,8 @@ interface Query {
   headers?: Headers
   json?: boolean
   credentials?: 'omit', // fetch API credentials field. Same as in the config.
-  throwCodes: /5../ // Status codes to throw. Same as in the config.
+  throwCodes?: /5../, // Status codes to throw. Same as in the config.
+  handleArrays?: '[]' // querystring: arr[]=1&arr[]=2&... vs arr=1,2,...
 }
 ```
 

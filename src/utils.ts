@@ -1,6 +1,7 @@
 
-import { curry } from 'ramda'
-import { Query } from './types'
+import { curry, type, join, replace } from 'ramda'
+import { Query, HandleArrays } from './types'
+import { reduce, compose, append } from 'ramda'
 
 export const trim = curry((symbols: string, str: string) => {
   let found_first = null,
@@ -25,14 +26,48 @@ export const trim = curry((symbols: string, str: string) => {
   )
 })
 
-// Turns query params into query string.
+const unshield: (a: string) => string = compose(replace(/&/g, '\\&'), String)
+
+const stringifyPair = (
+  handleArrays: HandleArrays,
+  key: string,
+  value: any
+): string => {
+  switch(type(value)) {
+    case 'Array':
+      switch(handleArrays) {
+        case '[]':
+          return compose(
+            join('&'),
+            reduce(
+              (accum, cur) => append(
+                stringifyPair(handleArrays, `${key}[]`, cur), accum
+              ), []
+            )
+          )(value)
+        case ',':
+          return compose(
+            join(','),
+            reduce(
+              (accum, val) => append(unshield(val as string), accum),
+              []
+            )
+          )(value)
+      }
+    default:
+      return `${key}=${unshield(value)}`
+  }
+  
+}
+
+/** Turns query params into query string. */
 export const formURI = (query: Partial<Query>) => {
   const parts: string[] = []
   if(query.params) {
     const params_part: string[] = []
     Object.entries(query.params).forEach(([name, param]) => {
       if(param != undefined) {
-        params_part.push(`${name}=${String(param).replace(/&/g, '\\&')}`)
+        params_part.push(stringifyPair(query.handleArrays || '[]', name, param))
       }
     })
     if(params_part.length) {

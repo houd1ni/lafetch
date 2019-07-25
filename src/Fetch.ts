@@ -4,13 +4,14 @@ import { formURI, addBase, hole } from './utils'
 import { Query, Config, OutMiddleware, InMiddleware, FetchData } from './types'
 import { addHeaders, asyncpipe } from './helpers'
 
-const default_config = {
+const default_config: Config = {
   base: '/',
   json: true,
   headers: {},
   timeout: 1e4,
   throwCodes: /\w/, // doesn't throw.
   credentials: 'omit',
+  handleArrays: '[]',
   middleware: {
     in: [],
     out: []
@@ -112,6 +113,7 @@ export class Fetch {
       timeout: this.config.timeout,
       credentials: this.config.credentials,
       throwCodes: this.config.throwCodes,
+      handleArrays: this.config.handleArrays,
       misc: {}
     }
     const middle = {} as { in: InMiddleware, out: OutMiddleware }

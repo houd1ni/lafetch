@@ -9,6 +9,7 @@ export interface Headers {
 	[name: string]: string | null;
 }
 export declare type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect';
+export declare type HandleArrays = '[]' | ',';
 export declare type OutMiddleware = (query: Query) => Promise<Query>;
 export declare type InMiddleware = ({ query: Query, response: any }: {
 	query: any;
@@ -24,6 +25,7 @@ export interface Config {
 	timeout: number;
 	credentials: Credentials;
 	throwCodes: RegExp;
+	handleArrays: HandleArrays;
 	middleware: {
 		in?: InMiddleware[];
 		out?: OutMiddleware[];
@@ -46,6 +48,7 @@ export interface Query {
 	json: boolean;
 	timeout: number;
 	misc: AnyObject;
+	handleArrays: HandleArrays;
 }
 export interface FetchData {
 	method: Method;
@@ -104,6 +107,7 @@ export declare class ServerError extends FetchError {
 	name: string;
 	constructor(response: Response);
 }
+/** Turns query params into query string. */
 export declare const formURI: (query: Partial<Query>) => string;
 
 export {};
