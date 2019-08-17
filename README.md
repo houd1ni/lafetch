@@ -47,7 +47,7 @@ interface Query {
   }
   headers?: Headers
   json?: boolean
-  credentials?: 'omit', // fetch API credentials field. Same as in the config.
+  credentials?: 'same-origin', // fetch API credentials field. Same as in the config.
   throwCodes?: /5../, // Status codes to throw. Same as in the config.
   handleArrays?: '[]' // querystring: arr[]=1&arr[]=2&... vs arr=1,2,...
 }

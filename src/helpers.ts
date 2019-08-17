@@ -55,19 +55,7 @@ export const mapKeys = curry((
 ) as any)(o))
 
 export const asyncpipe = (() => {
-  const pipe = async (fns: Function[], data: any, i: number): Promise<any> => {
-    if(~i) {
-      const result = fns[i](data)
-      return await pipe(
-        fns,
-        result instanceof Promise
-          ? await result
-          : result,
-        --i
-      )
-    } else {
-      return data
-    }
-  }
+  const pipe = async (fns: Function[], data: any, i: number): Promise<any> =>
+    ~i ? await pipe(fns, await fns[i](data), --i) : data
   return (...fns: Function[]) => (data?: any) => pipe(fns, data, fns.length-1)
 })()

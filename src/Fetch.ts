@@ -10,7 +10,7 @@ const default_config: Config = {
   headers: {},
   timeout: 1e4,
   throwCodes: /\n/, // doesn't throw.
-  credentials: 'omit',
+  credentials: 'same-origin',
   handleArrays: '[]',
   middleware: {
     in: [],
