@@ -1,4 +1,4 @@
-
+import { T } from 'ramda'
 type Callback<T> = (data: T) => void
 
 export class Cached<T = any> {
@@ -11,7 +11,11 @@ export class Cached<T = any> {
       rj: Callback<any>
     }[]
   } = {}
-  protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
+  protected tryCacheWhen<P = T>(
+    key: string,
+    cacheIf: (res: any) => boolean,
+    fetchFn: () => Promise<P>
+  ): Promise<P> {
     return new Promise<P>((ff, rj) => {
       if(this.cache[key]) {
         ff(this.cache[key])
@@ -20,7 +24,9 @@ export class Cached<T = any> {
       } else {
         this.proceccing[key] = [{ ff, rj }]
         fetchFn().then(data => {
-          this.cache[key] = data
+          if(cacheIf(data)) {
+            this.cache[key] = data
+          }
           this.proceccing[key].forEach(({ ff }) => ff(data))
           delete this.proceccing[key]
         }).catch((e) => {
@@ -28,5 +34,8 @@ export class Cached<T = any> {
         })
       }
     })
+  }
+  protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
+    return this.tryCacheWhen(key, T, fetchFn)
   }
 }

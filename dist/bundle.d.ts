@@ -80,6 +80,7 @@ export declare class Fetch {
 export declare class Cached<T = any> {
 	private cache;
 	private proceccing;
+	protected tryCacheWhen<P = T>(key: string, cacheIf: (res: any) => boolean, fetchFn: () => Promise<P>): Promise<P>;
 	protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P>;
 }
 export interface Response {
