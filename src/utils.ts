@@ -1,6 +1,6 @@
 
 import { curry, type, join, replace } from 'ramda'
-import { Query, HandleArrays } from './types'
+import { Query, HandleArrays, AnyObject } from './types'
 import { reduce, compose, append } from 'ramda'
 
 export const trim = curry((symbols: string, str: string) => {
@@ -86,3 +86,10 @@ export const addBase = (base: string, url: string) => {
 }
 
 export const hole = <T=any>(a: T) => a as T
+
+export const removeAllProps = (o: AnyObject) => {
+  for(let k in o) {
+    delete o[k]
+  }
+  return o
+}

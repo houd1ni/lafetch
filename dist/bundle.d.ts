@@ -82,6 +82,7 @@ export declare class Cached<T = any> {
 	private proceccing;
 	protected tryCacheWhen<P = T>(key: string, cacheIf: (res: any) => boolean, fetchFn: () => Promise<P>): Promise<P>;
 	protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P>;
+	protected dropCache(key?: string): void;
 }
 export interface Response {
 	status: number;

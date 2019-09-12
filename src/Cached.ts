@@ -1,4 +1,5 @@
 import { T } from 'ramda'
+import { removeAllProps } from './utils';
 type Callback<T> = (data: T) => void
 
 export class Cached<T = any> {
@@ -37,5 +38,12 @@ export class Cached<T = any> {
   }
   protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P> {
     return this.tryCacheWhen(key, T, fetchFn)
+  }
+  protected dropCache(key: string = '') {
+    if(key) {
+      delete this.cache[key]
+    } else {
+      removeAllProps(this.cache)
+    }
   }
 }
