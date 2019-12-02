@@ -28,6 +28,9 @@ const api = new Fetch({
     in?: [], // ({query, response}) => Promise<{query, response}>
     out?: [] // (query: Query) => Promise<Query>
   },
+  // fetch adapter. Defaults to the window fetch.
+  // In node can work with https://www.npmjs.com/package/node-fetch
+  adapter?: fetch,
   credentials?: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
   throwCodes?: /5../, // HTTP status codes to throw. Defaults to /\n/ (no throws at all).
   handleArrays?: '[]' // querystring: arr[]=1&arr[]=2&... vs arr=1,2,...

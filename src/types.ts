@@ -24,6 +24,7 @@ export interface Config {
   credentials: Credentials
   throwCodes: RegExp
   handleArrays: HandleArrays
+  adapter: (url: string, conf: AnyObject) => Promise<Response> | null
   middleware: {
     in?: InMiddleware[]
     out?: OutMiddleware[]

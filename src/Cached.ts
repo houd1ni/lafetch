@@ -1,5 +1,5 @@
 import { T } from 'ramda'
-import { removeAllProps } from './utils';
+import { removeAllProps } from './utils'
 type Callback<T> = (data: T) => void
 
 export class Cached<T = any> {
@@ -14,7 +14,7 @@ export class Cached<T = any> {
   } = {}
   protected tryCacheWhen<P = T>(
     key: string,
-    cacheIf: (res: any) => boolean,
+    cacheIf: (data: any) => boolean,
     fetchFn: () => Promise<P>
   ): Promise<P> {
     return new Promise<P>((ff, rj) => {

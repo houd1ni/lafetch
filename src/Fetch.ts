@@ -9,6 +9,7 @@ const default_config: Config = {
   json: true,
   headers: {},
   timeout: 1e4,
+  adapter: (url: string, conf: any) => fetch(url, conf),
   throwCodes: /\n/, // doesn't throw.
   credentials: 'same-origin',
   handleArrays: '[]',
@@ -82,7 +83,7 @@ export class Fetch {
           rj('timeout')
         }, query.timeout)
         try {
-          const response = await fetch(query.url, data)
+          const response = await this.config.adapter(query.url, data)
           if(!stuck) {
             clearTimeout(to)
             if(query.throwCodes.test(String(response.status))) {

@@ -1,5 +1,4 @@
-/// <reference types="node" />
-/// <reference types="ramda" />
+import { Curry } from 'ts-toolbelt';
 
 export interface AnyObject {
 	[key: string]: any;
@@ -58,14 +57,14 @@ export interface FetchData {
 }
 export declare type AsyncFn = (...args: any[]) => Promise<any>;
 /** Adds new headers to provided Query. */
-export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
-export declare const forEach: Curry.Curry<(fn: Function, items: any[]) => Promise<void>>;
-export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
+export declare const addHeaders: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(headers: Headers, query: Query) => Query>;
+export declare const forEach: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(fn: Function, items: any[]) => Promise<void>>;
+export declare const forEachAsync: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
 export declare const waitAll: (promises: Promise<any>[]) => Promise<any[]>;
 export declare const explore: (value: any) => any;
 export declare const clearEmpty: <T = AnyObject>(o: T) => AnyObject;
-export declare const bind: (obj: AnyObject, methodName: string) => Curry.Curry<any>;
-export declare const mapKeys: Curry.Curry<(keyMap: {
+export declare const bind: (obj: AnyObject, methodName: string) => import("ts-toolbelt/out/types/src/Function/Curry").Curry<any>;
+export declare const mapKeys: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(keyMap: {
 	[oldKey: string]: string;
 }, o: AnyObject) => any>;
 export declare const asyncpipe: (...fns: Function[]) => (data?: any) => Promise<any>;
