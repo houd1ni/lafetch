@@ -1,6 +1,6 @@
-import { type, mergeDeepRight } from 'ramda'
+import { type, mergeDeepRight, compose, assoc } from 'ramda'
 import { formURI, addBase, hole } from './utils'
-import { Query, Config, OutMiddleware, InMiddleware, FetchData } from './types'
+import { Query, Config, OutMiddleware, InMiddleware, FetchData, AnyFunc } from './types'
 import { addHeaders, asyncpipe } from './helpers'
 
 const default_config: Config = {
@@ -12,6 +12,7 @@ const default_config: Config = {
   throwCodes: /\n/, // doesn't throw.
   credentials: 'same-origin',
   handleArrays: '[]',
+  encoding: 'json',
   middleware: {
     in: [],
     out: []
@@ -40,10 +41,25 @@ export class Fetch {
       },
       async (query: Query) => {
         if(type(query.body) == 'Object') {
-          query = addHeaders({'Content-Type': 'application/json'}, query)
-          query.body = JSON.stringify(query.body)
+          const ct = 'Content-Type'
+          switch(query.encoding) {
+            case 'json':
+              return (compose as any)(
+                addHeaders({[ct]: 'application/json'}),
+                assoc('body', JSON.stringify(query.body))
+              )(query)
+            case 'url':
+              return (compose as any)(
+                addHeaders({[ct]: 'application/x-www-form-urlencoded'}),
+                assoc('body', formURI({ params: query.body }).slice(1))
+              )(query)
+            case 'multipart':
+              console.warn('lafetch: multipart encoding is not implemented yet.')
+            default:
+              // TODO:
+              return query
+          }
         }
-        return query
       },
       async (query: Query) => {
         for(const name in query.headers) {
@@ -114,6 +130,7 @@ export class Fetch {
       credentials: this.config.credentials,
       throwCodes: this.config.throwCodes,
       handleArrays: this.config.handleArrays,
+      encoding: this.config.encoding,
       misc: {}
     }
     const middle = {} as { in: InMiddleware, out: OutMiddleware }

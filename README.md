@@ -30,6 +30,7 @@ const api = new Fetch({
   },
   // fetch adapter. Defaults to the window fetch.
   // In node can work with https://www.npmjs.com/package/node-fetch
+  // But there many of config fields are not implemented, i.e. credentials. 
   adapter?: fetch,
   credentials?: 'omit' | 'same-origin' | 'include', // fetch API credentials field.
   throwCodes?: /5../, // HTTP status codes to throw. Defaults to /\n/ (no throws at all).

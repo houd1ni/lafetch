@@ -11,6 +11,7 @@ export interface Headers {
 }
 export declare type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect';
 export declare type HandleArrays = '[]' | ',';
+export declare type Encoding = 'json' | 'url' | 'multipart';
 export declare type OutMiddleware = (query: Query) => Promise<Query>;
 export declare type InMiddleware = ({ query: Query, response: any }: {
 	query: any;
@@ -27,6 +28,7 @@ export interface Config {
 	credentials: Credentials;
 	throwCodes: RegExp;
 	handleArrays: HandleArrays;
+	encoding: Encoding;
 	adapter: (url: string, conf: AnyObject) => Promise<AnyObject> | null;
 	middleware: {
 		in?: InMiddleware[];
@@ -44,6 +46,7 @@ export interface Query {
 	};
 	/** Request body. For POST requests in particular. */
 	body: any;
+	encoding: Encoding;
 	headers: Headers;
 	credentials: Credentials;
 	throwCodes?: RegExp;
@@ -71,6 +74,20 @@ export declare const mapKeys: Curry.Curry<(keyMap: {
 	[oldKey: string]: string;
 }, o: AnyObject) => any>;
 export declare const asyncpipe: (...fns: AnyFunc[]) => (data?: any) => Promise<any>;
+export interface CookieData {
+	name: string;
+	value: any;
+	attrs: AnyObject;
+}
+export declare class Cookie {
+	data: Partial<CookieData>;
+	parse(str: string): Partial<CookieData>;
+	get(): Partial<CookieData>;
+	set(v: any): void;
+	stringify(): any;
+	toString(): any;
+	constructor(str?: string);
+}
 export declare class Fetch {
 	private config;
 	private middleware;

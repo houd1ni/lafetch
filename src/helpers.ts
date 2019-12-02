@@ -5,12 +5,13 @@ import {
   tap, bind as rbind
 } from 'ramda'
 import { Query, Headers, AnyObject, AnyFunc } from './types'
+import { parseCookie, stringifyCookie } from './utils'
 
 /** Adds new headers to provided Query. */
 export const addHeaders = curry((headers: Headers, query: Query): Query => {
   return {
     ...query,
-    headers: Object.assign({}, query.headers, headers)
+    headers: { ...query.headers, ...headers }
   }
 })
 
@@ -59,3 +60,36 @@ export const asyncpipe = (() => {
     ~i ? await pipe(fns, await fns[i](data), --i) : data
   return (...fns: AnyFunc[]) => (data?: any) => pipe(fns, data, fns.length-1)
 })()
+
+interface CookieData {
+  name: string,
+  value: any,
+  attrs: AnyObject
+}
+
+export class Cookie {
+  public data: Partial<CookieData> = null
+  public parse(str: string) {
+    this.data = parseCookie(str)
+    return this.get()
+  }
+  public get() {
+    return this.data
+  }
+  public set(v: any) {
+    this.data.value = v
+  }
+  public stringify() {
+    return stringifyCookie(this.data)
+  }
+  public toString() {
+    return this.stringify()
+  }
+  constructor(str?: string) {
+    if(str) {
+      this.parse(str)
+    } else {
+      this.data = { name: '', value: null, attrs: {} }
+    }
+  }
+}

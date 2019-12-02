@@ -1,6 +1,11 @@
 
-import { curry, type, join, replace, reduce, compose, append } from 'ramda'
-import { Query, HandleArrays, AnyObject } from './types'
+import {
+  curry, type, join, replace, reduce, compose,
+  append, fromPairs, map, split, equals, not, filter
+} from 'ramda'
+import { Query, HandleArrays, AnyObject, AnyFunc } from './types'
+import toPairs from 'ramda/es/toPairs'
+import complement from 'ramda/es/complement'
 
 export const trim = curry((symbols: string, str: string) => {
   let found_first = null,
@@ -57,6 +62,33 @@ const stringifyPair = (
       return `${key}=${unshield(value)}`
   }
 }
+
+export const splitOnce = curry((delimiter: RegExp, s: string) => {
+  const i = s.search(delimiter)
+  return ~i ? [ s.slice(0, i), s.slice(i+1) ] : [ s ]
+})
+
+export const parseCookie = compose(
+  ([[k, v], ...attrs]) => ({
+    name: k,
+    value: v,
+    attrs: (equals(attrs, [null]) ? {} : fromPairs(attrs))
+  }),
+  map(compose(
+    ([key, value]) =>  key
+      ? [key, value ? decodeURIComponent(value) : true]
+      : null,
+    splitOnce(/=/)
+  )),
+  split(/; ?/g)
+)
+
+export const stringifyCookie = (compose as any)(
+  join('; '),
+  filter(compose(not, equals('Null'), type)),
+  map((([k, v]) => v === null ? null : (v===true ? k : `${k}=${v}`))),
+  ({ name, value, attrs }) => [ [name, value], ...toPairs(attrs) ]
+)
 
 /** Turns query params into query string. */
 export const formURI = (query: Partial<Query>) => {

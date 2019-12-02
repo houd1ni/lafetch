@@ -12,6 +12,7 @@ export interface Headers {
 
 export type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect'
 export type HandleArrays = '[]' | ','
+export type Encoding = 'json' | 'url' | 'multipart'
 
 export type OutMiddleware = (query: Query) => Promise<Query>
 export type InMiddleware = ({ query: Query, response: any }) =>
@@ -25,6 +26,7 @@ export interface Config {
   credentials: Credentials
   throwCodes: RegExp
   handleArrays: HandleArrays
+  encoding: Encoding
   adapter: (url: string, conf: AnyObject) => Promise<AnyObject> | null
   middleware: {
     in?: InMiddleware[]
@@ -43,6 +45,7 @@ export interface Query {
   }
   /** Request body. For POST requests in particular. */
   body: any
+  encoding: Encoding
   headers: Headers
   credentials: Credentials
   throwCodes?: RegExp
