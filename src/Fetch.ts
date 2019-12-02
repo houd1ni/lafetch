@@ -59,6 +59,8 @@ export class Fetch {
               // TODO:
               return query
           }
+        } else {
+          return query
         }
       },
       async (query: Query) => {

@@ -68,7 +68,7 @@ interface CookieData {
 }
 
 export class Cookie {
-  public data: Partial<CookieData> = null
+  public data: CookieData = null
   public parse(str: string) {
     this.data = parseCookie(str)
     return this.get()

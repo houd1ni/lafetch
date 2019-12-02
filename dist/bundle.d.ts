@@ -80,9 +80,9 @@ export interface CookieData {
 	attrs: AnyObject;
 }
 export declare class Cookie {
-	data: Partial<CookieData>;
-	parse(str: string): Partial<CookieData>;
-	get(): Partial<CookieData>;
+	data: CookieData;
+	parse(str: string): CookieData;
+	get(): CookieData;
 	set(v: any): void;
 	stringify(): any;
 	toString(): any;
