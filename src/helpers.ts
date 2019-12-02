@@ -4,7 +4,7 @@ import {
   fromPairs, toPairs, compose, map, filter, isNil,
   tap, bind as rbind
 } from 'ramda'
-import { Query, Headers, AnyObject } from './types'
+import { Query, Headers, AnyObject, AnyFunc } from './types'
 
 /** Adds new headers to provided Query. */
 export const addHeaders = curry((headers: Headers, query: Query): Query => {
@@ -15,14 +15,14 @@ export const addHeaders = curry((headers: Headers, query: Query): Query => {
 })
 
 export const forEach = (() => {
-  const pipe = async (fn: Function, items: any[], i: number) => {
+  const pipe = async (fn: AnyFunc, items: any[], i: number) => {
     if(i<items.length) {
       await fn(items[i])
       await pipe(fn, items, ++i)
     }
   }
   return curry(
-    (fn: Function, items: any[]) => pipe(fn, items, 0)
+    (fn: AnyFunc, items: any[]) => pipe(fn, items, 0)
   )
 })()
 
@@ -55,7 +55,7 @@ export const mapKeys = curry((
 ) as any)(o))
 
 export const asyncpipe = (() => {
-  const pipe = async (fns: Function[], data: any, i: number): Promise<any> =>
+  const pipe = async (fns: AnyFunc[], data: any, i: number): Promise<any> =>
     ~i ? await pipe(fns, await fns[i](data), --i) : data
-  return (...fns: Function[]) => (data?: any) => pipe(fns, data, fns.length-1)
+  return (...fns: AnyFunc[]) => (data?: any) => pipe(fns, data, fns.length-1)
 })()

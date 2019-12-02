@@ -1,8 +1,10 @@
-import { Curry } from 'ts-toolbelt';
+/// <reference types="node" />
+/// <reference types="ramda" />
 
 export interface AnyObject {
 	[key: string]: any;
 }
+export declare type AnyFunc = (...args: any[]) => any;
 export declare type Credentials = 'omit' | 'same-origin' | 'include';
 export interface Headers {
 	[name: string]: string | null;
@@ -19,12 +21,13 @@ export declare type InMiddleware = ({ query: Query, response: any }: {
 }>;
 export interface Config {
 	base: string;
-	json: true;
+	json: boolean;
 	headers: Headers;
 	timeout: number;
 	credentials: Credentials;
 	throwCodes: RegExp;
 	handleArrays: HandleArrays;
+	adapter: (url: string, conf: AnyObject) => Promise<AnyObject> | null;
 	middleware: {
 		in?: InMiddleware[];
 		out?: OutMiddleware[];
@@ -57,17 +60,17 @@ export interface FetchData {
 }
 export declare type AsyncFn = (...args: any[]) => Promise<any>;
 /** Adds new headers to provided Query. */
-export declare const addHeaders: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(headers: Headers, query: Query) => Query>;
-export declare const forEach: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(fn: Function, items: any[]) => Promise<void>>;
-export declare const forEachAsync: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
+export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
+export declare const forEach: Curry.Curry<(fn: AnyFunc, items: any[]) => Promise<void>>;
+export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
 export declare const waitAll: (promises: Promise<any>[]) => Promise<any[]>;
 export declare const explore: (value: any) => any;
 export declare const clearEmpty: <T = AnyObject>(o: T) => AnyObject;
-export declare const bind: (obj: AnyObject, methodName: string) => import("ts-toolbelt/out/types/src/Function/Curry").Curry<any>;
-export declare const mapKeys: import("ts-toolbelt/out/types/src/Function/Curry").Curry<(keyMap: {
+export declare const bind: (obj: AnyObject, methodName: string) => Curry.Curry<any>;
+export declare const mapKeys: Curry.Curry<(keyMap: {
 	[oldKey: string]: string;
 }, o: AnyObject) => any>;
-export declare const asyncpipe: (...fns: Function[]) => (data?: any) => Promise<any>;
+export declare const asyncpipe: (...fns: AnyFunc[]) => (data?: any) => Promise<any>;
 export declare class Fetch {
 	private config;
 	private middleware;
@@ -79,7 +82,7 @@ export declare class Fetch {
 export declare class Cached<T = any> {
 	private cache;
 	private proceccing;
-	protected tryCacheWhen<P = T>(key: string, cacheIf: (res: any) => boolean, fetchFn: () => Promise<P>): Promise<P>;
+	protected tryCacheWhen<P = T>(key: string, cacheIf: (data: any) => boolean, fetchFn: () => Promise<P>): Promise<P>;
 	protected tryCache<P = T>(key: string, fetchFn: () => Promise<P>): Promise<P>;
 	protected dropCache(key?: string): void;
 }

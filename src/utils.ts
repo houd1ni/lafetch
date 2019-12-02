@@ -1,7 +1,6 @@
 
-import { curry, type, join, replace } from 'ramda'
+import { curry, type, join, replace, reduce, compose, append } from 'ramda'
 import { Query, HandleArrays, AnyObject } from './types'
-import { reduce, compose, append } from 'ramda'
 
 export const trim = curry((symbols: string, str: string) => {
   let found_first = null,

@@ -2,6 +2,7 @@
 export interface AnyObject {
   [key: string]: any
 }
+export type AnyFunc = (...args: any[]) => any
 
 export type Credentials = 'omit' | 'same-origin' | 'include'
 
@@ -18,13 +19,13 @@ export type InMiddleware = ({ query: Query, response: any }) =>
 
 export interface Config {
   base: string
-  json: true
+  json: boolean
   headers: Headers
   timeout: number
   credentials: Credentials
   throwCodes: RegExp
   handleArrays: HandleArrays
-  adapter: (url: string, conf: AnyObject) => Promise<Response> | null
+  adapter: (url: string, conf: AnyObject) => Promise<AnyObject> | null
   middleware: {
     in?: InMiddleware[]
     out?: OutMiddleware[]

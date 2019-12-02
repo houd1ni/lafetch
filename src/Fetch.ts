@@ -1,5 +1,4 @@
-import mergeDeepRight from 'ramda/src/mergeDeepRight'
-import type from 'ramda/src/type'
+import { type, mergeDeepRight } from 'ramda'
 import { formURI, addBase, hole } from './utils'
 import { Query, Config, OutMiddleware, InMiddleware, FetchData } from './types'
 import { addHeaders, asyncpipe } from './helpers'
