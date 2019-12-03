@@ -35,7 +35,7 @@ export const forEachAsync = curry(
 export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
 export const explore = tap(rbind(console.log, console))
 export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
-  pickBy(unary(complement(isEmpty)))
+  compose(pickBy, unary, complement)(isEmpty)
 export const bind = (obj: AnyObject, methodName: string) =>
   curry(obj[methodName].bind(obj))
 
@@ -68,7 +68,7 @@ interface CookieData {
 }
 
 export class Cookie {
-  public data: CookieData = null
+  private data: CookieData = null
   public parse(str: string) {
     this.data = parseCookie(str)
     return this.get()

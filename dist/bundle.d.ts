@@ -42,7 +42,7 @@ export interface Query {
 	result: any;
 	/** querystring parameters. */
 	params: {
-		[name: string]: string | null;
+		[name: string]: any;
 	};
 	/** Request body. For POST requests in particular. */
 	body: any;
@@ -80,7 +80,7 @@ export interface CookieData {
 	attrs: AnyObject;
 }
 export declare class Cookie {
-	data: CookieData;
+	private data;
 	parse(str: string): CookieData;
 	get(): CookieData;
 	set(v: any): void;

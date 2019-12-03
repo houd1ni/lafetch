@@ -41,7 +41,7 @@ export interface Query {
   result: any
   /** querystring parameters. */
   params: {
-    [name: string]: string | null
+    [name: string]: any
   }
   /** Request body. For POST requests in particular. */
   body: any
