@@ -1,6 +1,6 @@
-import { type, mergeDeepRight, compose, assoc } from 'ramda'
-import { formURI, addBase, hole } from './utils'
-import { Query, Config, OutMiddleware, InMiddleware, FetchData, AnyFunc } from './types'
+import { type, mergeDeep, compose, assoc, clone } from 'pepka'
+import { formURI, addBase, hole, removeAllProps } from './utils'
+import { Query, Config, OutMiddleware, InMiddleware, FetchData } from './types'
 import { addHeaders, asyncpipe } from './helpers'
 
 const default_config: Config = {
@@ -33,6 +33,7 @@ export class Fetch {
     out: [
       async (query: Query) => {
         query.url = formURI(query)
+        removeAllProps(query.params)
         return query
       },
       async (query: Query) => {
@@ -70,7 +71,8 @@ export class Fetch {
           }
         }
         return query
-      }
+      },
+      async (query: Query) => clone(query)
     ]
   }
   private basic_query: Query
@@ -80,7 +82,7 @@ export class Fetch {
   }
   public async query<T=any>(query: Partial<Query>): Promise<T> {
     query = await this.applyMiddleware.out(
-      mergeDeepRight(this.basic_query, query) as Query
+      mergeDeep(this.basic_query, query) as Query
     )
     if(query.result) {
       return query.result
@@ -119,7 +121,7 @@ export class Fetch {
     }
   }
   constructor(config: Partial<Config> = {}) {
-    this.config = mergeDeepRight(default_config, config) as Config
+    this.config = mergeDeep(default_config, config) as Config
     this.basic_query = {
       url: '',
       method: 'get',

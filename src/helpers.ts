@@ -1,9 +1,9 @@
 // Helpers to import to apps for easier work.
 import {
-  curry, complement, pickBy, unary, isEmpty,
+  curry, complement, pickBy, isEmpty,
   fromPairs, toPairs, compose, map, filter, isNil,
-  tap, bind as rbind
-} from 'ramda'
+  tap, bind as pbind
+} from 'pepka'
 import { Query, Headers, AnyObject, AnyFunc } from './types'
 import { parseCookie, stringifyCookie } from './utils'
 
@@ -28,14 +28,14 @@ export const forEach = (() => {
 })()
 
 export const forEachAsync = curry(
-  (fn: (item: any) => any, items: any[]) =>
+  (fn: (item: any) => Promise<any>, items: any[]) =>
     Promise.all(items.map(fn))
 )
 
 export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
-export const explore = tap(rbind(console.log, console))
+export const explore = tap(pbind(console.log, console))
 export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
-  compose(pickBy, unary, complement)(isEmpty)
+  compose(pickBy, complement)(isEmpty)
 export const bind = (obj: AnyObject, methodName: string) =>
   curry(obj[methodName].bind(obj))
 

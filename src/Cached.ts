@@ -1,4 +1,4 @@
-import { T } from 'ramda'
+import { T } from 'pepka'
 import { removeAllProps } from './utils'
 type Callback<T> = (data: T) => void
 

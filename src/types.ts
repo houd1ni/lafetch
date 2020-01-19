@@ -10,7 +10,7 @@ export interface Headers {
   [name: string]: string | null
 }
 
-export type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect'
+export type Method = 'get' | 'post' | 'put' | 'patch' | 'head' | 'delete' | 'options' | 'trace' | 'connect'
 export type HandleArrays = '[]' | ','
 export type Encoding = 'json' | 'url' | 'multipart'
 

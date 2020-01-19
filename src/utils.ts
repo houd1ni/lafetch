@@ -1,11 +1,9 @@
 
 import {
-  curry, type, join, replace, reduce, compose,
+  curry, type, join, replace, reduce, compose, toPairs,
   append, fromPairs, map, split, equals, not, filter
-} from 'ramda'
-import { Query, HandleArrays, AnyObject, AnyFunc } from './types'
-import toPairs from 'ramda/es/toPairs'
-import complement from 'ramda/es/complement'
+} from 'pepka'
+import { Query, HandleArrays, AnyObject } from './types'
 
 export const trim = curry((symbols: string, str: string) => {
   let found_first = null,

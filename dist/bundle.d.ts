@@ -1,6 +1,3 @@
-/// <reference types="node" />
-/// <reference types="ramda" />
-
 export interface AnyObject {
 	[key: string]: any;
 }
@@ -9,7 +6,7 @@ export declare type Credentials = 'omit' | 'same-origin' | 'include';
 export interface Headers {
 	[name: string]: string | null;
 }
-export declare type Method = 'get' | 'post' | 'put' | 'head' | 'delete' | 'options' | 'trace' | 'connect';
+export declare type Method = 'get' | 'post' | 'put' | 'patch' | 'head' | 'delete' | 'options' | 'trace' | 'connect';
 export declare type HandleArrays = '[]' | ',';
 export declare type Encoding = 'json' | 'url' | 'multipart';
 export declare type OutMiddleware = (query: Query) => Promise<Query>;
@@ -63,16 +60,14 @@ export interface FetchData {
 }
 export declare type AsyncFn = (...args: any[]) => Promise<any>;
 /** Adds new headers to provided Query. */
-export declare const addHeaders: Curry.Curry<(headers: Headers, query: Query) => Query>;
-export declare const forEach: Curry.Curry<(fn: AnyFunc, items: any[]) => Promise<void>>;
-export declare const forEachAsync: Curry.Curry<(fn: (item: any) => any, items: any[]) => Promise<any[]>>;
+export declare const addHeaders: (...args: any[]) => any;
+export declare const forEach: (...args: any[]) => any;
+export declare const forEachAsync: (...args: any[]) => any;
 export declare const waitAll: (promises: Promise<any>[]) => Promise<any[]>;
-export declare const explore: (value: any) => any;
+export declare const explore: any;
 export declare const clearEmpty: <T = AnyObject>(o: T) => AnyObject;
-export declare const bind: (obj: AnyObject, methodName: string) => Curry.Curry<any>;
-export declare const mapKeys: Curry.Curry<(keyMap: {
-	[oldKey: string]: string;
-}, o: AnyObject) => any>;
+export declare const bind: (obj: AnyObject, methodName: string) => (...args: any[]) => any;
+export declare const mapKeys: (...args: any[]) => any;
 export declare const asyncpipe: (...fns: AnyFunc[]) => (data?: any) => Promise<any>;
 export interface CookieData {
 	name: string;
@@ -111,7 +106,7 @@ declare abstract class FetchError {
 	private response;
 	protected pattern: RegExp;
 	protected name: string;
-	readonly type: string;
+	get type(): string;
 	/** Checks is the response actually of this sort of Errors. */
 	private is;
 	protected try(): void;
