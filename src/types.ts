@@ -2,7 +2,7 @@
 export interface AnyObject {
   [key: string]: any
 }
-export type AnyFunc = (...args: any[]) => any
+// export type AnyFunc = (...args: any[]) => any
 
 export type Credentials = 'omit' | 'same-origin' | 'include'
 

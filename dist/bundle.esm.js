@@ -1,15 +1,330 @@
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+import { curry, compose, replace, equals, fromPairs, map, split, join, filter, not, type, toPairs, reduce, append, mirror, forEachSerial, forEachAsync as forEachAsync$1, waitAll as waitAll$1, mapKeys as mapKeys$1, composeAsync, explore as explore$1, isEmpty, assoc, clone, mergeDeep, T } from 'pepka';
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+const trim = curry((symbols, str) => {
+    let found_first = null, found_last = null, symbol;
+    for (let i = 0; i < str.length; i++) {
+        symbol = str[i];
+        if (!symbols.includes(symbol)) {
+            if (found_first == null) {
+                found_first = i;
+            }
+            found_last = null;
+        }
+        else {
+            if (found_first) {
+                found_last = i;
+            }
+        }
+    }
+    return str.slice(found_first || 0, found_last || str.length);
+});
+const unshield = compose(replace(/&/g, '\\&'), String);
+const stringifyPair = (handleArrays, key, value) => {
+    switch (type(value)) {
+        case 'Array':
+            switch (handleArrays) {
+                case '[]':
+                    return compose(join('&'), reduce((accum, cur) => append(stringifyPair(handleArrays, `${key}[]`, cur), accum), []))(value);
+                case ',':
+                    return `${key}=` + compose(join(','), reduce((accum, val) => append(unshield(val), accum), []))(value);
+            }
+        default:
+            return `${key}=${unshield(value)}`;
+    }
+};
+const splitOnce = curry((delimiter, s) => {
+    const i = s.search(delimiter);
+    return ~i ? [s.slice(0, i), s.slice(i + 1)] : [s];
+});
+const parseCookie = compose(([[k, v], ...attrs]) => ({
+    name: k,
+    value: v,
+    attrs: (equals(attrs, [null]) ? {} : fromPairs(attrs))
+}), map(compose(([key, value]) => key
+    ? [key, value ? decodeURIComponent(value) : true]
+    : null, splitOnce(/=/))), split(/; ?/g));
+const stringifyCookie = compose(join('; '), filter(compose(not, equals('Null'), type)), map((([k, v]) => v === null ? null : (v === true ? k : `${k}=${v}`))), ({ name, value, attrs }) => [[name, value], ...toPairs(attrs)]);
+/** Turns query params into query string. */
+const formURI = (query) => {
+    const parts = [];
+    if (query.params) {
+        const params_part = [];
+        Object.entries(query.params).forEach(([name, param]) => {
+            if (param != undefined) {
+                params_part.push(stringifyPair(query.handleArrays || '[]', name, param));
+            }
+        });
+        if (params_part.length) {
+            parts.push(`?${params_part.join('&')}`);
+        }
+    }
+    return encodeURI((query.url || '') + parts.map(trim('-')).join('/'));
+};
+const trimSlash = trim('/');
+const addBase = (base, url) => {
+    if (!url.includes('://') && !url.startsWith(base)) {
+        return trimSlash(base) + '/' + trimSlash(url);
+    }
+    else {
+        return url;
+    }
+};
+const hole = mirror;
+const removeAllProps = (o) => {
+    for (let k in o) {
+        delete o[k];
+    }
+    return o;
+};
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-var t=function(n,e){return(t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,n){t.__proto__=n}||function(t,n){for(var e in n)n.hasOwnProperty(e)&&(t[e]=n[e])})(n,e)};function n(n,e){function r(){this.constructor=n}t(n,e),n.prototype=null===e?Object.create(e):(r.prototype=e.prototype,new r)}var e=function(){return(e=Object.assign||function(t){for(var n,e=1,r=arguments.length;e<r;e++)for(var o in n=arguments[e])Object.prototype.hasOwnProperty.call(n,o)&&(t[o]=n[o]);return t}).apply(this,arguments)};function r(t,n,e,r){return new(e||(e=Promise))((function(o,i){function u(t){try{a(r.next(t))}catch(t){i(t)}}function c(t){try{a(r.throw(t))}catch(t){i(t)}}function a(t){t.done?o(t.value):new e((function(n){n(t.value)})).then(u,c)}a((r=r.apply(t,n||[])).next())}))}function o(t,n){var e,r,o,i,u={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return i={next:c(0),throw:c(1),return:c(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function c(i){return function(c){return function(i){if(e)throw new TypeError("Generator is already executing.");for(;u;)try{if(e=1,r&&(o=2&i[0]?r.return:i[0]?r.throw||((o=r.return)&&o.call(r),0):r.next)&&!(o=o.call(r,i[1])).done)return o;switch(r=0,o&&(i=[2&i[0],o.value]),i[0]){case 0:case 1:o=i;break;case 4:return u.label++,{value:i[1],done:!1};case 5:u.label++,r=i[1],i=[0];continue;case 7:i=u.ops.pop(),u.trys.pop();continue;default:if(!(o=(o=u.trys).length>0&&o[o.length-1])&&(6===i[0]||2===i[0])){u=0;continue}if(3===i[0]&&(!o||i[1]>o[0]&&i[1]<o[3])){u.label=i[1];break}if(6===i[0]&&u.label<o[1]){u.label=o[1],o=i;break}if(o&&u.label<o[2]){u.label=o[2],u.ops.push(i);break}o[2]&&u.ops.pop(),u.trys.pop();continue}i=n.call(t,u)}catch(t){i=[6,t],r=0}finally{e=o=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,c])}}}function i(){for(var t=0,n=0,e=arguments.length;n<e;n++)t+=arguments[n].length;var r=Array(t),o=0;for(n=0;n<e;n++)for(var i=arguments[n],u=0,c=i.length;u<c;u++,o++)r[o]=i[u];return r}const u=function(){},c=t=>t===u,a=(t,n=!1)=>{let e=0;for(let r in t)(n||!c(t[r]))&&e++;return e},s=(t,n)=>{const e=a(t,!0),r=n.length,o={};let i=0,u=0;for(;i<e;i++)o[i]=c(t[i])&&u<r?n[u++]:t[i];for(;u<r;u++)o[e+u]=n[u];return o},l=(t,n,e)=>t.length-a(n)-a(e)<1?t(...(t=>{const n=a(t),e=Array(n);for(let r=0;r<n;r++)e[r]=t[r];return e})(s(n,e))):(...r)=>l(t,s(n,e),r),f=t=>(...n)=>t.length>a(n)?l(t,{},n):t(...n),h=t=>typeof t,d=t=>null===t,p=f((t,n,e)=>e.reduce(t,n)),y=f((t,n)=>{for(let r in n)switch(J(n[r])){case"Array":case"Object":if(e=t[r],"object"==h(e)&&!d(e)){y(t[r],n[r]);break}default:t[r]=n[r]}var e;return t}),v=f((t,n)=>{if("object"==h(t)&&"object"==h(n)){if(d(t)||d(n))return t===n;for(let e of[t,n])for(let r in e)if(!v(t[r],n[r]))return!1}return t===n}),b=f((t,n,e,r)=>t(r)?n(r):e(r)),g=(...t)=>n=>{for(let e=C(t)-1;e>-1;e--)n=t[e](n);return n},m=f((t,n)=>t.bind(n)),w=f((t,n)=>n[t]),j=f((t,n,e)=>e.slice(t,(t=>"number"==h(t))(n)?n:1/0)),O=w(0),A=(j(1,null),t=>d(t)||(t=>void 0===t)(t)),C=t=>t.length,P=t=>()=>t,_=t=>!t,S=t=>n=>_(t(n)),x=t=>Object.entries(t),T=f((t,n)=>(t(n),n)),k=(t,n)=>[...n,t],N=f((t,n)=>n.split(t)),q=P(!0),E=f((t,n,e)=>({...e,[t]:n})),M=f((t,n)=>n[t]),U=f((t,n,e)=>b(C,g(b(A,P(t),e=>U(t,j(1,null,n),e)),(t=>f((n,e)=>t(e,n)))(M)(e),O),P(e))(n)),W=(U(void 0),t=>{switch(h(t)){case"object":switch(J(t)){case"Null":return t;case"Array":return H(W,t);case"Object":const n={};for(let e in t)n[e]=W(t[e]);return n}default:return t}}),I=f((t,n,e)=>p(t,W(n),e)),R=f((t,n)=>z(t,n)),F=t=>I((t,n)=>E(...n,t),{},t),G=f((t,n)=>n.join(t)),H=f((t,n)=>n.map(t)),J=t=>{const n=h(t);return"object"==n?(t=>Array.isArray(t))(t)?"Array":d(t)?"Null":"Object":(t=>t.toUpperCase())(n[0])+n.slice(1)},L=f((t,n,e)=>e.replace(t,n)),z=f((t,n)=>b(g(v("Array"),J),n=>n.filter(t),g(F,z(([n,e])=>t(e,n)),x))(n)),B=f((t,n)=>y(W(t),n));var D,K=f((function(t,n){for(var e,r=null,o=null,i=0;i<n.length;i++)e=n[i],t.includes(e)?r&&(o=i):(null==r&&(r=i),o=null);return n.slice(r||0,o||n.length)})),Q=g(L(/&/g,"\\&"),String),V=function(t,n,e){switch(J(e)){case"Array":switch(t){case"[]":return g(G("&"),I((function(e,r){return k(V(t,n+"[]",r),e)}),[]))(e);case",":return n+"="+g(G(","),I((function(t,n){return k(Q(n),t)}),[]))(e)}default:return n+"="+Q(e)}},X=f((function(t,n){var e=n.search(t);return~e?[n.slice(0,e),n.slice(e+1)]:[n]})),Y=g((function(t){var n=t[0],e=n[0],r=n[1],o=t.slice(1);return{name:e,value:r,attrs:v(o,[null])?{}:F(o)}}),H(g((function(t){var n=t[0],e=t[1];return n?[n,!e||decodeURIComponent(e)]:null}),X(/=/))),N(/; ?/g)),Z=g(G("; "),z(g(_,v("Null"),J)),H((function(t){var n=t[0],e=t[1];return null===e?null:!0===e?n:n+"="+e})),(function(t){var n=t.name,e=t.value,r=t.attrs;return i([[n,e]],x(r))})),$=function(t){var n=[];if(t.params){var e=[];Object.entries(t.params).forEach((function(n){var r=n[0],o=n[1];null!=o&&e.push(V(t.handleArrays||"[]",r,o))})),e.length&&n.push("?"+e.join("&"))}return encodeURI((t.url||"")+n.map(K("-")).join("/"))},tt=K("/"),nt=function(t){return t},et=function(t){for(var n in t)delete t[n];return t},rt=f((function(t,n){return e(e({},n),{headers:e(e({},n.headers),t)})})),ot=(D=function(t,n,e){return r(void 0,void 0,void 0,(function(){return o(this,(function(r){switch(r.label){case 0:return e<n.length?[4,t(n[e])]:[3,3];case 1:return r.sent(),[4,D(t,n,++e)];case 2:r.sent(),r.label=3;case 3:return[2]}}))}))},f((function(t,n){return D(t,n,0)}))),it=f((function(t,n){return Promise.all(n.map(t))})),ut=function(t){return Promise.all(t)},ct=T(m(console.log,console)),at=g(R,S)(t=>{switch(J(t)){case"String":return""==t;case"Array":return 0==C(t);case"Null":return!1;case"Object":return 0==C(Object.keys(t));default:return!1}}),st=function(t,n){return f(t[n].bind(t))},lt=f((function(t,n){return g(F,z(S(A)),H((function(n){var e=n[0],r=n[1];return null===t[e]?null:[t[e]||e,r]})),x)(n)})),ft=function(){var t=function(n,e,i){return r(void 0,void 0,Promise,(function(){var r,u,c;return o(this,(function(o){switch(o.label){case 0:return~i?(u=t,c=[n],[4,n[i](e)]):[3,3];case 1:return[4,u.apply(void 0,c.concat([o.sent(),--i]))];case 2:return r=o.sent(),[3,4];case 3:r=e,o.label=4;case 4:return[2,r]}}))}))};return function(){for(var n=[],e=0;e<arguments.length;e++)n[e]=arguments[e];return function(e){return t(n,e,n.length-1)}}}(),ht=function(){function t(t){this.data=null,t?this.parse(t):this.data={name:"",value:null,attrs:{}}}return t.prototype.parse=function(t){return this.data=Y(t),this.get()},t.prototype.get=function(){return this.data},t.prototype.set=function(t){this.data.value=t},t.prototype.stringify=function(){return Z(this.data)},t.prototype.toString=function(){return this.stringify()},t}(),dt={base:"/",json:!0,headers:{},timeout:1e4,adapter:function(t,n){return fetch(t,n)},throwCodes:/\n/,credentials:"same-origin",handleArrays:"[]",encoding:"json",middleware:{in:[],out:[]}},pt=function(t){return"out"==t?nt:function(t){var n=t.query,e=t.response;return r(void 0,void 0,void 0,(function(){var t;return o(this,(function(r){switch(r.label){case 0:return n.json?[4,e.json()]:[3,2];case 1:return t=r.sent(),[3,3];case 2:t=e,r.label=3;case 3:return[2,t]}}))}))}},yt=function(){function t(t){var n=this;void 0===t&&(t={}),this.middleware={in:[],out:[function(t){return r(n,void 0,void 0,(function(){return o(this,(function(n){return t.url=$(t),et(t.params),[2,t]}))}))},function(t){return r(n,void 0,void 0,(function(){return o(this,(function(n){var e,r;return t.url=(e=this.config.base,(r=t.url).includes("://")||r.startsWith(e)?r:tt(e)+"/"+tt(r)),[2,t]}))}))},function(t){return r(n,void 0,void 0,(function(){var n,e,r;return o(this,(function(o){if("Object"!=J(t.body))return[2,t];switch(n="Content-Type",t.encoding){case"json":return[2,g(rt((e={},e[n]="application/json",e)),E("body",JSON.stringify(t.body)))(t)];case"url":return[2,g(rt((r={},r[n]="application/x-www-form-urlencoded",r)),E("body",$({params:t.body}).slice(1)))(t)];case"multipart":console.warn("lafetch: multipart encoding is not implemented yet.");default:return[2,t]}return[2]}))}))},function(t){return r(n,void 0,void 0,(function(){var n;return o(this,(function(e){for(n in t.headers)"Null"==J(t.headers[n])&&delete t.headers[n];return[2,t]}))}))},function(t){return r(n,void 0,void 0,(function(){return o(this,(function(n){return[2,W(t)]}))}))}]},this.config=B(dt,t),this.basic_query={url:"",method:"get",headers:{},params:{},result:null,body:null,json:this.config.json,timeout:this.config.timeout,credentials:this.config.credentials,throwCodes:this.config.throwCodes,handleArrays:this.config.handleArrays,encoding:this.config.encoding,misc:{}};for(var e={},u=0,c=["in","out"];u<c.length;u++){var a=c[u];e[a]=ft.apply(void 0,i([pt(a)],this.middleware[a],this.config.middleware[a]))}this.applyMiddleware=e}return t.prototype.query=function(t){return r(this,void 0,Promise,(function(){var n,e=this;return o(this,(function(i){switch(i.label){case 0:return[4,this.applyMiddleware.out(B(this.basic_query,t))];case 1:return(t=i.sent()).result?[2,t.result]:(n={method:t.method,headers:t.headers,credentials:t.credentials},t.body&&(n.body=t.body),[2,new Promise((function(i,u){return r(e,void 0,void 0,(function(){var e,r,c,a,s;return o(this,(function(o){switch(o.label){case 0:e=!1,r=setTimeout((function(){e=!0,u("timeout")}),t.timeout),o.label=1;case 1:return o.trys.push([1,6,,7]),[4,this.config.adapter(t.url,n)];case 2:return c=o.sent(),e?[3,5]:(clearTimeout(r),t.throwCodes.test(String(c.status))?(u(c.status),[3,5]):[3,3]);case 3:return a=i,[4,this.applyMiddleware.in({query:t,response:c})];case 4:a.apply(void 0,[o.sent()]),o.label=5;case 5:return[3,7];case 6:return s=o.sent(),clearTimeout(r),u(s),[3,7];case 7:return[2]}}))}))}))])}}))}))},t}(),vt=function(){function t(){this.cache={},this.proceccing={}}return t.prototype.tryCacheWhen=function(t,n,e){var r=this;return new Promise((function(o,i){r.cache[t]?o(r.cache[t]):r.proceccing[t]?r.proceccing[t].push({ff:o,rj:i}):(r.proceccing[t]=[{ff:o,rj:i}],e().then((function(e){n(e)&&(r.cache[t]=e),r.proceccing[t].forEach((function(t){return(0,t.ff)(e)})),delete r.proceccing[t]})).catch((function(n){r.proceccing[t].forEach((function(t){return(0,t.rj)(n)}))})))}))},t.prototype.tryCache=function(t,n){return this.tryCacheWhen(t,q,n)},t.prototype.dropCache=function(t){void 0===t&&(t=""),t?delete this.cache[t]:et(this.cache)},t}(),bt=function(){function t(t){this.pattern=/never/,this.name="Fetch",this.response=t}return Object.defineProperty(t.prototype,"type",{get:function(){return this.name.toLowerCase()},enumerable:!0,configurable:!0}),t.prototype.is=function(t){return this.pattern.test(String(t))},t.prototype.try=function(){var t=this.response;if(this.is(t.status))throw new Error("HTTP "+this.name+" error: status is "+t.status)},t}(),gt=function(t){function e(n){var e=t.call(this,n)||this;return e.pattern=/4\d[13]/,e.name="Access",e.try(),e}return n(e,t),e}(bt),mt=function(t){function e(n){var e=t.call(this,n)||this;return e.pattern=/5\d\d/,e.name="Server",e.try(),e}return n(e,t),e}(bt);export{gt as AccessError,vt as Cached,ht as Cookie,yt as Fetch,mt as ServerError,rt as addHeaders,ft as asyncpipe,st as bind,at as clearEmpty,ct as explore,ot as forEach,it as forEachAsync,$ as formURI,lt as mapKeys,ut as waitAll};
+// Helpers to import to apps for easier work.
+/** Adds new headers to provided Query. */
+const addHeaders = curry((headers, query) => {
+    return {
+        ...query,
+        headers: { ...query.headers, ...headers }
+    };
+});
+const forEach = forEachSerial;
+const forEachAsync = forEachAsync$1;
+const waitAll = waitAll$1;
+const mapKeys = mapKeys$1;
+const asyncpipe = composeAsync;
+const explore = explore$1('_');
+const clearEmpty = filter(isEmpty);
+const bind = (obj, methodName) => curry(obj[methodName].bind(obj));
+class Cookie {
+    constructor(str) {
+        this.data = null;
+        if (str) {
+            this.parse(str);
+        }
+        else {
+            this.data = { name: '', value: null, attrs: {} };
+        }
+    }
+    parse(str) {
+        this.data = parseCookie(str);
+        return this.get();
+    }
+    get() {
+        return this.data;
+    }
+    set(v) {
+        this.data.value = v;
+    }
+    stringify() {
+        return stringifyCookie(this.data);
+    }
+    toString() {
+        return this.stringify();
+    }
+}
+
+const default_config = {
+    base: '/',
+    json: true,
+    headers: {},
+    timeout: 1e4,
+    adapter: (url, conf) => fetch(url, conf),
+    throwCodes: /\n/,
+    credentials: 'same-origin',
+    handleArrays: '[]',
+    encoding: 'json',
+    middleware: {
+        in: [],
+        out: []
+    }
+};
+const finalTransform = (dir) => {
+    return dir == 'out'
+        ? hole
+        : async ({ query, response }) => query.json ? await response.json() : response;
+};
+class Fetch {
+    constructor(config = {}) {
+        this.middleware = {
+            in: [],
+            out: [
+                async (query) => {
+                    query.url = formURI(query);
+                    removeAllProps(query.params);
+                    return query;
+                },
+                async (query) => {
+                    query.url = addBase(this.config.base, query.url);
+                    return query;
+                },
+                async (query) => {
+                    if (type(query.body) == 'Object') {
+                        const ct = 'Content-Type';
+                        switch (query.encoding) {
+                            case 'json':
+                                return compose(addHeaders({ [ct]: 'application/json' }), assoc('body', JSON.stringify(query.body)))(query);
+                            case 'url':
+                                return compose(addHeaders({ [ct]: 'application/x-www-form-urlencoded' }), assoc('body', formURI({ params: query.body }).slice(1)))(query);
+                            case 'multipart':
+                                console.warn('lafetch: multipart encoding is not implemented yet.');
+                            default:
+                                // TODO:
+                                return query;
+                        }
+                    }
+                    else {
+                        return query;
+                    }
+                },
+                async (query) => {
+                    for (const name in query.headers) {
+                        if (type(query.headers[name]) == 'Null') {
+                            delete query.headers[name];
+                        }
+                    }
+                    return query;
+                },
+                async (query) => clone(query)
+            ]
+        };
+        this.config = mergeDeep(default_config, config);
+        this.basic_query = {
+            url: '',
+            method: 'get',
+            headers: {},
+            params: {},
+            result: null,
+            body: null,
+            json: this.config.json,
+            timeout: this.config.timeout,
+            credentials: this.config.credentials,
+            throwCodes: this.config.throwCodes,
+            handleArrays: this.config.handleArrays,
+            encoding: this.config.encoding,
+            misc: {}
+        };
+        const middle = {};
+        for (const dir of ['in', 'out']) {
+            middle[dir] = asyncpipe(finalTransform(dir), ...this.middleware[dir], ...this.config.middleware[dir]);
+        }
+        this.applyMiddleware = middle;
+    }
+    async query(query) {
+        query = await this.applyMiddleware.out(mergeDeep(this.basic_query, query));
+        if (query.result) {
+            return query.result;
+        }
+        else {
+            const data = {
+                method: query.method,
+                headers: query.headers,
+                credentials: query.credentials
+            };
+            if (query.body) {
+                data.body = query.body;
+            }
+            return new Promise(async (ff, rj) => {
+                let stuck = false;
+                const to = setTimeout(() => {
+                    stuck = true;
+                    rj('timeout');
+                }, query.timeout);
+                try {
+                    const response = await this.config.adapter(query.url, data);
+                    if (!stuck) {
+                        clearTimeout(to);
+                        if (query.throwCodes.test(String(response.status))) {
+                            rj(response.status);
+                        }
+                        else {
+                            ff((await this.applyMiddleware.in({ query, response }))); // this should be done by finalTransform.
+                        }
+                    }
+                }
+                catch (e) {
+                    clearTimeout(to);
+                    rj(e);
+                }
+            });
+        }
+    }
+}
+
+class Cached {
+    constructor() {
+        this.cache = {};
+        this.proceccing = {};
+    }
+    tryCacheWhen(key, cacheIf, fetchFn) {
+        return new Promise((ff, rj) => {
+            if (this.cache[key]) {
+                ff(this.cache[key]);
+            }
+            else if (this.proceccing[key]) {
+                this.proceccing[key].push({ ff, rj });
+            }
+            else {
+                this.proceccing[key] = [{ ff, rj }];
+                fetchFn().then(data => {
+                    if (cacheIf(data)) {
+                        this.cache[key] = data;
+                    }
+                    this.proceccing[key].forEach(({ ff }) => ff(data));
+                    delete this.proceccing[key];
+                }).catch((e) => {
+                    this.proceccing[key].forEach(({ rj }) => rj(e));
+                });
+            }
+        });
+    }
+    tryCache(key, fetchFn) {
+        return this.tryCacheWhen(key, T, fetchFn);
+    }
+    dropCache(key = '') {
+        if (key) {
+            delete this.cache[key];
+        }
+        else {
+            removeAllProps(this.cache);
+        }
+    }
+}
+
+class FetchError {
+    /** Throws itself in the case of the error of response. */
+    constructor(response) {
+        this.pattern = /never/;
+        this.name = 'Fetch';
+        this.response = response;
+    }
+    get type() {
+        return this.name.toLowerCase();
+    }
+    /** Checks is the response actually of this sort of Errors. */
+    is(status) {
+        return this.pattern.test(String(status));
+    }
+    try() {
+        const { response } = this;
+        // console.log({t: this, response, pattern: this.pattern, is: this.is(response.status)})
+        if (this.is(response.status)) {
+            throw new Error(`HTTP ${this.name} error: status is ${response.status}`);
+        }
+    }
+}
+class AccessError extends FetchError {
+    constructor(response) {
+        super(response);
+        this.pattern = /4\d[13]/;
+        this.name = 'Access';
+        this.try();
+    }
+}
+class ServerError extends FetchError {
+    constructor(response) {
+        super(response);
+        this.pattern = /5\d\d/;
+        this.name = 'Server';
+        this.try();
+    }
+}
+
+export { AccessError, Cached, Cookie, Fetch, ServerError, addHeaders, asyncpipe, bind, clearEmpty, explore, forEach, forEachAsync, formURI, mapKeys, waitAll };

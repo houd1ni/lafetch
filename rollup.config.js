@@ -1,7 +1,7 @@
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
 import typescript from 'rollup-plugin-typescript'
-import { terser } from 'rollup-plugin-terser'
+// import { terser } from 'rollup-plugin-terser'
 import replace from 'rollup-plugin-replace'
 
 const isDev = process.env.NODE_ENV==='development'
@@ -13,13 +13,13 @@ export default {
     format: process.env.BUILD === 'cjs' ? 'cjs' : 'es',
     name: 'lafetch'
   },
-  external: isDev ? [] : [ 'ramda' ],
+  external: isDev ? [] : [ 'pepka' ],
   context: 'null',
   plugins: [
     resolve(),
     commonjs(),
-    typescript({ target: isDev ? 'esnext' : 'es5' }),
-    !isDev && terser(),
+    typescript({ target: 'esnext' }),
+    // !isDev && terser(),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })

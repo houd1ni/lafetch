@@ -1,16 +1,348 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+'use strict';
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Object.defineProperty(exports, '__esModule', { value: true });
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-var t=function(e,r){return(t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var r in e)e.hasOwnProperty(r)&&(t[r]=e[r])})(e,r)};function e(e,r){function n(){this.constructor=e}t(e,r),e.prototype=null===r?Object.create(r):(n.prototype=r.prototype,new n)}var r=function(){return(r=Object.assign||function(t){for(var e,r=1,n=arguments.length;r<n;r++)for(var o in e=arguments[r])Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o]);return t}).apply(this,arguments)};function n(t,e,r,n){return new(r||(r=Promise))((function(o,i){function u(t){try{a(n.next(t))}catch(t){i(t)}}function c(t){try{a(n.throw(t))}catch(t){i(t)}}function a(t){t.done?o(t.value):new r((function(e){e(t.value)})).then(u,c)}a((n=n.apply(t,e||[])).next())}))}function o(t,e){var r,n,o,i,u={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return i={next:c(0),throw:c(1),return:c(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function c(i){return function(c){return function(i){if(r)throw new TypeError("Generator is already executing.");for(;u;)try{if(r=1,n&&(o=2&i[0]?n.return:i[0]?n.throw||((o=n.return)&&o.call(n),0):n.next)&&!(o=o.call(n,i[1])).done)return o;switch(n=0,o&&(i=[2&i[0],o.value]),i[0]){case 0:case 1:o=i;break;case 4:return u.label++,{value:i[1],done:!1};case 5:u.label++,n=i[1],i=[0];continue;case 7:i=u.ops.pop(),u.trys.pop();continue;default:if(!(o=(o=u.trys).length>0&&o[o.length-1])&&(6===i[0]||2===i[0])){u=0;continue}if(3===i[0]&&(!o||i[1]>o[0]&&i[1]<o[3])){u.label=i[1];break}if(6===i[0]&&u.label<o[1]){u.label=o[1],o=i;break}if(o&&u.label<o[2]){u.label=o[2],u.ops.push(i);break}o[2]&&u.ops.pop(),u.trys.pop();continue}i=e.call(t,u)}catch(t){i=[6,t],n=0}finally{r=o=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,c])}}}function i(){for(var t=0,e=0,r=arguments.length;e<r;e++)t+=arguments[e].length;var n=Array(t),o=0;for(e=0;e<r;e++)for(var i=arguments[e],u=0,c=i.length;u<c;u++,o++)n[o]=i[u];return n}const u=function(){},c=t=>t===u,a=(t,e=!1)=>{let r=0;for(let n in t)(e||!c(t[n]))&&r++;return r},s=(t,e)=>{const r=a(t,!0),n=e.length,o={};let i=0,u=0;for(;i<r;i++)o[i]=c(t[i])&&u<n?e[u++]:t[i];for(;u<n;u++)o[r+u]=e[u];return o},l=(t,e,r)=>t.length-a(e)-a(r)<1?t(...(t=>{const e=a(t),r=Array(e);for(let n=0;n<e;n++)r[n]=t[n];return r})(s(e,r))):(...n)=>l(t,s(e,r),n),f=t=>(...e)=>t.length>a(e)?l(t,{},e):t(...e),h=t=>typeof t,p=t=>null===t,d=f((t,e,r)=>r.reduce(t,e)),y=f((t,e)=>{for(let n in e)switch(J(e[n])){case"Array":case"Object":if(r=t[n],"object"==h(r)&&!p(r)){y(t[n],e[n]);break}default:t[n]=e[n]}var r;return t}),v=f((t,e)=>{if("object"==h(t)&&"object"==h(e)){if(p(t)||p(e))return t===e;for(let r of[t,e])for(let n in r)if(!v(t[n],e[n]))return!1}return t===e}),b=f((t,e,r,n)=>t(n)?e(n):r(n)),g=(...t)=>e=>{for(let r=O(t)-1;r>-1;r--)e=t[r](e);return e},m=f((t,e)=>t.bind(e)),w=f((t,e)=>e[t]),j=f((t,e,r)=>r.slice(t,(t=>"number"==h(t))(e)?e:1/0)),x=w(0),A=(j(1,null),t=>p(t)||(t=>void 0===t)(t)),O=t=>t.length,C=t=>()=>t,P=t=>!t,_=t=>e=>P(t(e)),E=t=>Object.entries(t),S=f((t,e)=>(t(e),e)),k=(t,e)=>[...e,t],T=f((t,e)=>e.split(t)),N=C(!0),q=f((t,e,r)=>({...r,[t]:e})),M=f((t,e)=>e[t]),U=f((t,e,r)=>b(O,g(b(A,C(t),r=>U(t,j(1,null,e),r)),(t=>f((e,r)=>t(r,e)))(M)(r),x),C(r))(e)),I=(U(void 0),t=>{switch(h(t)){case"object":switch(J(t)){case"Null":return t;case"Array":return G(I,t);case"Object":const e={};for(let r in t)e[r]=I(t[r]);return e}default:return t}}),R=f((t,e,r)=>d(t,I(e),r)),W=f((t,e)=>L(t,e)),F=t=>R((t,e)=>q(...e,t),{},t),H=f((t,e)=>e.join(t)),G=f((t,e)=>e.map(t)),J=t=>{const e=h(t);return"object"==e?(t=>Array.isArray(t))(t)?"Array":p(t)?"Null":"Object":(t=>t.toUpperCase())(e[0])+e.slice(1)},K=f((t,e,r)=>r.replace(t,e)),L=f((t,e)=>b(g(v("Array"),J),e=>e.filter(t),g(F,L(([e,r])=>t(r,e)),E))(e)),z=f((t,e)=>y(I(t),e));var B,D=f((function(t,e){for(var r,n=null,o=null,i=0;i<e.length;i++)r=e[i],t.includes(r)?n&&(o=i):(null==n&&(n=i),o=null);return e.slice(n||0,o||e.length)})),Q=g(K(/&/g,"\\&"),String),V=function(t,e,r){switch(J(r)){case"Array":switch(t){case"[]":return g(H("&"),R((function(r,n){return k(V(t,e+"[]",n),r)}),[]))(r);case",":return e+"="+g(H(","),R((function(t,e){return k(Q(e),t)}),[]))(r)}default:return e+"="+Q(r)}},X=f((function(t,e){var r=e.search(t);return~r?[e.slice(0,r),e.slice(r+1)]:[e]})),Y=g((function(t){var e=t[0],r=e[0],n=e[1],o=t.slice(1);return{name:r,value:n,attrs:v(o,[null])?{}:F(o)}}),G(g((function(t){var e=t[0],r=t[1];return e?[e,!r||decodeURIComponent(r)]:null}),X(/=/))),T(/; ?/g)),Z=g(H("; "),L(g(P,v("Null"),J)),G((function(t){var e=t[0],r=t[1];return null===r?null:!0===r?e:e+"="+r})),(function(t){var e=t.name,r=t.value,n=t.attrs;return i([[e,r]],E(n))})),$=function(t){var e=[];if(t.params){var r=[];Object.entries(t.params).forEach((function(e){var n=e[0],o=e[1];null!=o&&r.push(V(t.handleArrays||"[]",n,o))})),r.length&&e.push("?"+r.join("&"))}return encodeURI((t.url||"")+e.map(D("-")).join("/"))},tt=D("/"),et=function(t){return t},rt=function(t){for(var e in t)delete t[e];return t},nt=f((function(t,e){return r(r({},e),{headers:r(r({},e.headers),t)})})),ot=(B=function(t,e,r){return n(void 0,void 0,void 0,(function(){return o(this,(function(n){switch(n.label){case 0:return r<e.length?[4,t(e[r])]:[3,3];case 1:return n.sent(),[4,B(t,e,++r)];case 2:n.sent(),n.label=3;case 3:return[2]}}))}))},f((function(t,e){return B(t,e,0)}))),it=f((function(t,e){return Promise.all(e.map(t))})),ut=S(m(console.log,console)),ct=g(W,_)(t=>{switch(J(t)){case"String":return""==t;case"Array":return 0==O(t);case"Null":return!1;case"Object":return 0==O(Object.keys(t));default:return!1}}),at=f((function(t,e){return g(F,L(_(A)),G((function(e){var r=e[0],n=e[1];return null===t[r]?null:[t[r]||r,n]})),E)(e)})),st=function(){var t=function(e,r,i){return n(void 0,void 0,Promise,(function(){var n,u,c;return o(this,(function(o){switch(o.label){case 0:return~i?(u=t,c=[e],[4,e[i](r)]):[3,3];case 1:return[4,u.apply(void 0,c.concat([o.sent(),--i]))];case 2:return n=o.sent(),[3,4];case 3:n=r,o.label=4;case 4:return[2,n]}}))}))};return function(){for(var e=[],r=0;r<arguments.length;r++)e[r]=arguments[r];return function(r){return t(e,r,e.length-1)}}}(),lt=function(){function t(t){this.data=null,t?this.parse(t):this.data={name:"",value:null,attrs:{}}}return t.prototype.parse=function(t){return this.data=Y(t),this.get()},t.prototype.get=function(){return this.data},t.prototype.set=function(t){this.data.value=t},t.prototype.stringify=function(){return Z(this.data)},t.prototype.toString=function(){return this.stringify()},t}(),ft={base:"/",json:!0,headers:{},timeout:1e4,adapter:function(t,e){return fetch(t,e)},throwCodes:/\n/,credentials:"same-origin",handleArrays:"[]",encoding:"json",middleware:{in:[],out:[]}},ht=function(t){return"out"==t?et:function(t){var e=t.query,r=t.response;return n(void 0,void 0,void 0,(function(){var t;return o(this,(function(n){switch(n.label){case 0:return e.json?[4,r.json()]:[3,2];case 1:return t=n.sent(),[3,3];case 2:t=r,n.label=3;case 3:return[2,t]}}))}))}},pt=function(){function t(t){var e=this;void 0===t&&(t={}),this.middleware={in:[],out:[function(t){return n(e,void 0,void 0,(function(){return o(this,(function(e){return t.url=$(t),rt(t.params),[2,t]}))}))},function(t){return n(e,void 0,void 0,(function(){return o(this,(function(e){var r,n;return t.url=(r=this.config.base,(n=t.url).includes("://")||n.startsWith(r)?n:tt(r)+"/"+tt(n)),[2,t]}))}))},function(t){return n(e,void 0,void 0,(function(){var e,r,n;return o(this,(function(o){if("Object"!=J(t.body))return[2,t];switch(e="Content-Type",t.encoding){case"json":return[2,g(nt((r={},r[e]="application/json",r)),q("body",JSON.stringify(t.body)))(t)];case"url":return[2,g(nt((n={},n[e]="application/x-www-form-urlencoded",n)),q("body",$({params:t.body}).slice(1)))(t)];case"multipart":console.warn("lafetch: multipart encoding is not implemented yet.");default:return[2,t]}return[2]}))}))},function(t){return n(e,void 0,void 0,(function(){var e;return o(this,(function(r){for(e in t.headers)"Null"==J(t.headers[e])&&delete t.headers[e];return[2,t]}))}))},function(t){return n(e,void 0,void 0,(function(){return o(this,(function(e){return[2,I(t)]}))}))}]},this.config=z(ft,t),this.basic_query={url:"",method:"get",headers:{},params:{},result:null,body:null,json:this.config.json,timeout:this.config.timeout,credentials:this.config.credentials,throwCodes:this.config.throwCodes,handleArrays:this.config.handleArrays,encoding:this.config.encoding,misc:{}};for(var r={},u=0,c=["in","out"];u<c.length;u++){var a=c[u];r[a]=st.apply(void 0,i([ht(a)],this.middleware[a],this.config.middleware[a]))}this.applyMiddleware=r}return t.prototype.query=function(t){return n(this,void 0,Promise,(function(){var e,r=this;return o(this,(function(i){switch(i.label){case 0:return[4,this.applyMiddleware.out(z(this.basic_query,t))];case 1:return(t=i.sent()).result?[2,t.result]:(e={method:t.method,headers:t.headers,credentials:t.credentials},t.body&&(e.body=t.body),[2,new Promise((function(i,u){return n(r,void 0,void 0,(function(){var r,n,c,a,s;return o(this,(function(o){switch(o.label){case 0:r=!1,n=setTimeout((function(){r=!0,u("timeout")}),t.timeout),o.label=1;case 1:return o.trys.push([1,6,,7]),[4,this.config.adapter(t.url,e)];case 2:return c=o.sent(),r?[3,5]:(clearTimeout(n),t.throwCodes.test(String(c.status))?(u(c.status),[3,5]):[3,3]);case 3:return a=i,[4,this.applyMiddleware.in({query:t,response:c})];case 4:a.apply(void 0,[o.sent()]),o.label=5;case 5:return[3,7];case 6:return s=o.sent(),clearTimeout(n),u(s),[3,7];case 7:return[2]}}))}))}))])}}))}))},t}(),dt=function(){function t(){this.cache={},this.proceccing={}}return t.prototype.tryCacheWhen=function(t,e,r){var n=this;return new Promise((function(o,i){n.cache[t]?o(n.cache[t]):n.proceccing[t]?n.proceccing[t].push({ff:o,rj:i}):(n.proceccing[t]=[{ff:o,rj:i}],r().then((function(r){e(r)&&(n.cache[t]=r),n.proceccing[t].forEach((function(t){return(0,t.ff)(r)})),delete n.proceccing[t]})).catch((function(e){n.proceccing[t].forEach((function(t){return(0,t.rj)(e)}))})))}))},t.prototype.tryCache=function(t,e){return this.tryCacheWhen(t,N,e)},t.prototype.dropCache=function(t){void 0===t&&(t=""),t?delete this.cache[t]:rt(this.cache)},t}(),yt=function(){function t(t){this.pattern=/never/,this.name="Fetch",this.response=t}return Object.defineProperty(t.prototype,"type",{get:function(){return this.name.toLowerCase()},enumerable:!0,configurable:!0}),t.prototype.is=function(t){return this.pattern.test(String(t))},t.prototype.try=function(){var t=this.response;if(this.is(t.status))throw new Error("HTTP "+this.name+" error: status is "+t.status)},t}(),vt=function(t){function r(e){var r=t.call(this,e)||this;return r.pattern=/4\d[13]/,r.name="Access",r.try(),r}return e(r,t),r}(yt),bt=function(t){function r(e){var r=t.call(this,e)||this;return r.pattern=/5\d\d/,r.name="Server",r.try(),r}return e(r,t),r}(yt);exports.AccessError=vt,exports.Cached=dt,exports.Cookie=lt,exports.Fetch=pt,exports.ServerError=bt,exports.addHeaders=nt,exports.asyncpipe=st,exports.bind=function(t,e){return f(t[e].bind(t))},exports.clearEmpty=ct,exports.explore=ut,exports.forEach=ot,exports.forEachAsync=it,exports.formURI=$,exports.mapKeys=at,exports.waitAll=function(t){return Promise.all(t)};
+var pepka = require('pepka');
+
+const trim = pepka.curry((symbols, str) => {
+    let found_first = null, found_last = null, symbol;
+    for (let i = 0; i < str.length; i++) {
+        symbol = str[i];
+        if (!symbols.includes(symbol)) {
+            if (found_first == null) {
+                found_first = i;
+            }
+            found_last = null;
+        }
+        else {
+            if (found_first) {
+                found_last = i;
+            }
+        }
+    }
+    return str.slice(found_first || 0, found_last || str.length);
+});
+const unshield = pepka.compose(pepka.replace(/&/g, '\\&'), String);
+const stringifyPair = (handleArrays, key, value) => {
+    switch (pepka.type(value)) {
+        case 'Array':
+            switch (handleArrays) {
+                case '[]':
+                    return pepka.compose(pepka.join('&'), pepka.reduce((accum, cur) => pepka.append(stringifyPair(handleArrays, `${key}[]`, cur), accum), []))(value);
+                case ',':
+                    return `${key}=` + pepka.compose(pepka.join(','), pepka.reduce((accum, val) => pepka.append(unshield(val), accum), []))(value);
+            }
+        default:
+            return `${key}=${unshield(value)}`;
+    }
+};
+const splitOnce = pepka.curry((delimiter, s) => {
+    const i = s.search(delimiter);
+    return ~i ? [s.slice(0, i), s.slice(i + 1)] : [s];
+});
+const parseCookie = pepka.compose(([[k, v], ...attrs]) => ({
+    name: k,
+    value: v,
+    attrs: (pepka.equals(attrs, [null]) ? {} : pepka.fromPairs(attrs))
+}), pepka.map(pepka.compose(([key, value]) => key
+    ? [key, value ? decodeURIComponent(value) : true]
+    : null, splitOnce(/=/))), pepka.split(/; ?/g));
+const stringifyCookie = pepka.compose(pepka.join('; '), pepka.filter(pepka.compose(pepka.not, pepka.equals('Null'), pepka.type)), pepka.map((([k, v]) => v === null ? null : (v === true ? k : `${k}=${v}`))), ({ name, value, attrs }) => [[name, value], ...pepka.toPairs(attrs)]);
+/** Turns query params into query string. */
+const formURI = (query) => {
+    const parts = [];
+    if (query.params) {
+        const params_part = [];
+        Object.entries(query.params).forEach(([name, param]) => {
+            if (param != undefined) {
+                params_part.push(stringifyPair(query.handleArrays || '[]', name, param));
+            }
+        });
+        if (params_part.length) {
+            parts.push(`?${params_part.join('&')}`);
+        }
+    }
+    return encodeURI((query.url || '') + parts.map(trim('-')).join('/'));
+};
+const trimSlash = trim('/');
+const addBase = (base, url) => {
+    if (!url.includes('://') && !url.startsWith(base)) {
+        return trimSlash(base) + '/' + trimSlash(url);
+    }
+    else {
+        return url;
+    }
+};
+const hole = pepka.mirror;
+const removeAllProps = (o) => {
+    for (let k in o) {
+        delete o[k];
+    }
+    return o;
+};
+
+// Helpers to import to apps for easier work.
+/** Adds new headers to provided Query. */
+const addHeaders = pepka.curry((headers, query) => {
+    return {
+        ...query,
+        headers: { ...query.headers, ...headers }
+    };
+});
+const forEach = pepka.forEachSerial;
+const forEachAsync = pepka.forEachAsync;
+const waitAll = pepka.waitAll;
+const mapKeys = pepka.mapKeys;
+const asyncpipe = pepka.composeAsync;
+const explore = pepka.explore('_');
+const clearEmpty = pepka.filter(pepka.isEmpty);
+const bind = (obj, methodName) => pepka.curry(obj[methodName].bind(obj));
+class Cookie {
+    constructor(str) {
+        this.data = null;
+        if (str) {
+            this.parse(str);
+        }
+        else {
+            this.data = { name: '', value: null, attrs: {} };
+        }
+    }
+    parse(str) {
+        this.data = parseCookie(str);
+        return this.get();
+    }
+    get() {
+        return this.data;
+    }
+    set(v) {
+        this.data.value = v;
+    }
+    stringify() {
+        return stringifyCookie(this.data);
+    }
+    toString() {
+        return this.stringify();
+    }
+}
+
+const default_config = {
+    base: '/',
+    json: true,
+    headers: {},
+    timeout: 1e4,
+    adapter: (url, conf) => fetch(url, conf),
+    throwCodes: /\n/,
+    credentials: 'same-origin',
+    handleArrays: '[]',
+    encoding: 'json',
+    middleware: {
+        in: [],
+        out: []
+    }
+};
+const finalTransform = (dir) => {
+    return dir == 'out'
+        ? hole
+        : async ({ query, response }) => query.json ? await response.json() : response;
+};
+class Fetch {
+    constructor(config = {}) {
+        this.middleware = {
+            in: [],
+            out: [
+                async (query) => {
+                    query.url = formURI(query);
+                    removeAllProps(query.params);
+                    return query;
+                },
+                async (query) => {
+                    query.url = addBase(this.config.base, query.url);
+                    return query;
+                },
+                async (query) => {
+                    if (pepka.type(query.body) == 'Object') {
+                        const ct = 'Content-Type';
+                        switch (query.encoding) {
+                            case 'json':
+                                return pepka.compose(addHeaders({ [ct]: 'application/json' }), pepka.assoc('body', JSON.stringify(query.body)))(query);
+                            case 'url':
+                                return pepka.compose(addHeaders({ [ct]: 'application/x-www-form-urlencoded' }), pepka.assoc('body', formURI({ params: query.body }).slice(1)))(query);
+                            case 'multipart':
+                                console.warn('lafetch: multipart encoding is not implemented yet.');
+                            default:
+                                // TODO:
+                                return query;
+                        }
+                    }
+                    else {
+                        return query;
+                    }
+                },
+                async (query) => {
+                    for (const name in query.headers) {
+                        if (pepka.type(query.headers[name]) == 'Null') {
+                            delete query.headers[name];
+                        }
+                    }
+                    return query;
+                },
+                async (query) => pepka.clone(query)
+            ]
+        };
+        this.config = pepka.mergeDeep(default_config, config);
+        this.basic_query = {
+            url: '',
+            method: 'get',
+            headers: {},
+            params: {},
+            result: null,
+            body: null,
+            json: this.config.json,
+            timeout: this.config.timeout,
+            credentials: this.config.credentials,
+            throwCodes: this.config.throwCodes,
+            handleArrays: this.config.handleArrays,
+            encoding: this.config.encoding,
+            misc: {}
+        };
+        const middle = {};
+        for (const dir of ['in', 'out']) {
+            middle[dir] = asyncpipe(finalTransform(dir), ...this.middleware[dir], ...this.config.middleware[dir]);
+        }
+        this.applyMiddleware = middle;
+    }
+    async query(query) {
+        query = await this.applyMiddleware.out(pepka.mergeDeep(this.basic_query, query));
+        if (query.result) {
+            return query.result;
+        }
+        else {
+            const data = {
+                method: query.method,
+                headers: query.headers,
+                credentials: query.credentials
+            };
+            if (query.body) {
+                data.body = query.body;
+            }
+            return new Promise(async (ff, rj) => {
+                let stuck = false;
+                const to = setTimeout(() => {
+                    stuck = true;
+                    rj('timeout');
+                }, query.timeout);
+                try {
+                    const response = await this.config.adapter(query.url, data);
+                    if (!stuck) {
+                        clearTimeout(to);
+                        if (query.throwCodes.test(String(response.status))) {
+                            rj(response.status);
+                        }
+                        else {
+                            ff((await this.applyMiddleware.in({ query, response }))); // this should be done by finalTransform.
+                        }
+                    }
+                }
+                catch (e) {
+                    clearTimeout(to);
+                    rj(e);
+                }
+            });
+        }
+    }
+}
+
+class Cached {
+    constructor() {
+        this.cache = {};
+        this.proceccing = {};
+    }
+    tryCacheWhen(key, cacheIf, fetchFn) {
+        return new Promise((ff, rj) => {
+            if (this.cache[key]) {
+                ff(this.cache[key]);
+            }
+            else if (this.proceccing[key]) {
+                this.proceccing[key].push({ ff, rj });
+            }
+            else {
+                this.proceccing[key] = [{ ff, rj }];
+                fetchFn().then(data => {
+                    if (cacheIf(data)) {
+                        this.cache[key] = data;
+                    }
+                    this.proceccing[key].forEach(({ ff }) => ff(data));
+                    delete this.proceccing[key];
+                }).catch((e) => {
+                    this.proceccing[key].forEach(({ rj }) => rj(e));
+                });
+            }
+        });
+    }
+    tryCache(key, fetchFn) {
+        return this.tryCacheWhen(key, pepka.T, fetchFn);
+    }
+    dropCache(key = '') {
+        if (key) {
+            delete this.cache[key];
+        }
+        else {
+            removeAllProps(this.cache);
+        }
+    }
+}
+
+class FetchError {
+    /** Throws itself in the case of the error of response. */
+    constructor(response) {
+        this.pattern = /never/;
+        this.name = 'Fetch';
+        this.response = response;
+    }
+    get type() {
+        return this.name.toLowerCase();
+    }
+    /** Checks is the response actually of this sort of Errors. */
+    is(status) {
+        return this.pattern.test(String(status));
+    }
+    try() {
+        const { response } = this;
+        // console.log({t: this, response, pattern: this.pattern, is: this.is(response.status)})
+        if (this.is(response.status)) {
+            throw new Error(`HTTP ${this.name} error: status is ${response.status}`);
+        }
+    }
+}
+class AccessError extends FetchError {
+    constructor(response) {
+        super(response);
+        this.pattern = /4\d[13]/;
+        this.name = 'Access';
+        this.try();
+    }
+}
+class ServerError extends FetchError {
+    constructor(response) {
+        super(response);
+        this.pattern = /5\d\d/;
+        this.name = 'Server';
+        this.try();
+    }
+}
+
+exports.AccessError = AccessError;
+exports.Cached = Cached;
+exports.Cookie = Cookie;
+exports.Fetch = Fetch;
+exports.ServerError = ServerError;
+exports.addHeaders = addHeaders;
+exports.asyncpipe = asyncpipe;
+exports.bind = bind;
+exports.clearEmpty = clearEmpty;
+exports.explore = explore;
+exports.forEach = forEach;
+exports.forEachAsync = forEachAsync;
+exports.formURI = formURI;
+exports.mapKeys = mapKeys;
+exports.waitAll = waitAll;

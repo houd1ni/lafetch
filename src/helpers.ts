@@ -1,10 +1,9 @@
 // Helpers to import to apps for easier work.
 import {
-  curry, complement, pickBy, isEmpty,
-  fromPairs, toPairs, compose, map, filter, isNil,
-  tap, bind as pbind
+  curry, isEmpty, explore as pexplore, waitAll as pwaitAll, composeAsync,
+  mapKeys as pmapKeys, forEachSerial, forEachAsync as pforEachAsync, filter
 } from 'pepka'
-import { Query, Headers, AnyObject, AnyFunc } from './types'
+import { Query, Headers, AnyObject } from './types'
 import { parseCookie, stringifyCookie } from './utils'
 
 /** Adds new headers to provided Query. */
@@ -15,51 +14,15 @@ export const addHeaders = curry((headers: Headers, query: Query): Query => {
   }
 })
 
-export const forEach = (() => {
-  const pipe = async (fn: AnyFunc, items: any[], i: number) => {
-    if(i<items.length) {
-      await fn(items[i])
-      await pipe(fn, items, ++i)
-    }
-  }
-  return curry(
-    (fn: AnyFunc, items: any[]) => pipe(fn, items, 0)
-  )
-})()
-
-export const forEachAsync = curry(
-  (fn: (item: any) => Promise<any>, items: any[]) =>
-    Promise.all(items.map(fn))
-)
-
-export const waitAll = (promises: Promise<any>[]) => Promise.all(promises)
-export const explore = tap(pbind(console.log, console))
-export const clearEmpty: <T = AnyObject>(o: T) => AnyObject =
-  compose(pickBy, complement)(isEmpty)
+export const forEach = forEachSerial
+export const forEachAsync = pforEachAsync
+export const waitAll = pwaitAll
+export const mapKeys = pmapKeys
+export const asyncpipe = composeAsync
+export const explore = pexplore('_')
+export const clearEmpty = filter(isEmpty)
 export const bind = (obj: AnyObject, methodName: string) =>
   curry(obj[methodName].bind(obj))
-
-export const mapKeys = curry((
-  keyMap: {[oldKey: string]: string},
-  o: AnyObject
-) => (compose(
-  fromPairs,
-  filter(complement(isNil)),
-  map(
-    (([k, v]: [string, any]) =>
-      keyMap[k]===null
-      ? null
-      : [keyMap[k] || k, v] as any
-    )
-  ),
-  toPairs as any
-) as any)(o))
-
-export const asyncpipe = (() => {
-  const pipe = async (fns: AnyFunc[], data: any, i: number): Promise<any> =>
-    ~i ? await pipe(fns, await fns[i](data), --i) : data
-  return (...fns: AnyFunc[]) => (data?: any) => pipe(fns, data, fns.length-1)
-})()
 
 interface CookieData {
   name: string,

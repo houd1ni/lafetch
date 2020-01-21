@@ -1,7 +1,7 @@
 
 import {
   curry, type, join, replace, reduce, compose, toPairs,
-  append, fromPairs, map, split, equals, not, filter
+  append, fromPairs, map, split, equals, not, filter, mirror
 } from 'pepka'
 import { Query, HandleArrays, AnyObject } from './types'
 
@@ -106,6 +106,7 @@ export const formURI = (query: Partial<Query>) => {
 }
 
 const trimSlash = trim('/')
+
 export const addBase = (base: string, url: string) => {
   if(!url.includes('://') && !url.startsWith(base)) {
     return trimSlash(base) + '/' + trimSlash(url)
@@ -114,7 +115,7 @@ export const addBase = (base: string, url: string) => {
   }
 }
 
-export const hole = <T=any>(a: T) => a as T
+export const hole = mirror
 
 export const removeAllProps = (o: AnyObject) => {
   for(let k in o) {
